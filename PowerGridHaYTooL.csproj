@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <AssemblyName>PowerGridHaYTooL</AssemblyName>
+    <RootNamespace>PowerGridHaYTooL</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <Version>9.3</Version>
+    <AssemblyVersion>9.3.0.0</AssemblyVersion>
+    <FileVersion>9.3.0.0</FileVersion>
+    <AssemblyTitle>Power Grid HaYTooL - Windows Power Schemes &amp; Performance Manager</AssemblyTitle>
+    <Title>Power Grid HaYTooL</Title>
+    <Product>Power Grid HaYTooL</Product>
+    <Description>Power Grid HaYTooL - Advanced Windows Power Schemes, Performance Modes and Desktop Context Menu Manager</Description>
+    <Company>HaYTooL</Company>
+    <Authors>HaYTooL</Authors>
+    <Copyright>Copyright © HaYTooL. All rights reserved.</Copyright>
+    <Trademark>HaYTooL</Trademark>
+    <PackageProjectUrl>https://github.com/HaYToKoRaZ/Power-Grid</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HaYToKoRaZ/Power-Grid</RepositoryUrl>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="app.ico" />
+    <Resource Include="logo.png" />
+    <Resource Include="powergrid_logo.png" />
+    <Resource Include="menu_icon_0.png" />
+    <Resource Include="menu_icon_1.png" />
+    <Resource Include="menu_icon_2.png" />
+    <Resource Include="flag_tr.png" />
+    <Resource Include="flag_en.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="PowerGridHaYTooL.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="H.NotifyIcon.Wpf" Version="2.4.1" />
+  </ItemGroup>
+
+</Project>

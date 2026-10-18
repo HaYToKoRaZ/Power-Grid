@@ -1,0 +1,757 @@
+<Window x:Class="PowerGridHaYTooL.UI.PlanEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Gelişmiş Güç Düzeni Ayarları - Kontrol Paneli" 
+        Height="890" Width="1050" 
+        MinHeight="680" MinWidth="880"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource BrushWindowBg}" 
+        Foreground="{DynamicResource BrushTextPrimary}"
+        FontFamily="Segoe UI" FontSize="12"
+        ToolTipService.InitialShowDelay="120"
+        ToolTipService.ShowDuration="45000"
+        ToolTipService.BetweenShowDelay="50"
+        Icon="pack://application:,,,/logo.png"
+        Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <!-- Modern Buton Stilleri -->
+        <Style TargetType="{x:Type Button}" x:Key="ModernBtn">
+            <Setter Property="Background" Value="{DynamicResource BrushBtnBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrushBtnBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="bd" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource BrushBtnHover}"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource BrushAccent}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource BrushListItemSelected}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Primary Accent Save Button -->
+        <Style TargetType="{x:Type Button}" x:Key="PrimaryBtn" BasedOn="{StaticResource ModernBtn}">
+            <Setter Property="Background" Value="{DynamicResource BrushAccent}"/>
+            <Setter Property="Foreground" Value="#090D16"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrushAccent}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="bd" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1" 
+                                CornerRadius="5" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.88"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Unlock Button Style (Kehribar Vurgulu) -->
+        <Style TargetType="{x:Type Button}" x:Key="UnlockBtn" BasedOn="{StaticResource ModernBtn}">
+            <Setter Property="Background" Value="#252410"/>
+            <Setter Property="Foreground" Value="#F1C40F"/>
+            <Setter Property="BorderBrush" Value="#856404"/>
+        </Style>
+
+        <!-- Lock Button Style (Kırmızı/Bordo Vurgulu) -->
+        <Style TargetType="{x:Type Button}" x:Key="LockBtn" BasedOn="{StaticResource ModernBtn}">
+            <Setter Property="Background" Value="#2A1616"/>
+            <Setter Property="Foreground" Value="#E74C3C"/>
+            <Setter Property="BorderBrush" Value="#802020"/>
+        </Style>
+
+        <!-- Modern Dashboard Card GroupBox Stili -->
+        <Style TargetType="{x:Type GroupBox}">
+            <Setter Property="BorderBrush" Value="{DynamicResource BrushBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushAccent}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupBox}">
+                        <Border Background="{DynamicResource BrushCardBg}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="7" 
+                                Margin="{TemplateBinding Margin}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="0,0,0,1" Padding="10,5" Background="{DynamicResource BrushHeaderBg}" CornerRadius="6,6,0,0">
+                                    <ContentPresenter ContentSource="Header" RecognizesAccessKey="True"/>
+                                </Border>
+                                <ContentPresenter Grid.Row="1" Margin="{TemplateBinding Padding}"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="0,3"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Cursor" Value="Help"/>
+        </Style>
+
+        <!-- Modern Slider Stili (BasedOn App.xaml universal template) -->
+        <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource {x:Type Slider}}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Minimum" Value="0"/>
+            <Setter Property="Maximum" Value="100"/>
+            <Setter Property="TickFrequency" Value="5"/>
+            <Setter Property="IsSnapToTickEnabled" Value="True"/>
+        </Style>
+
+        <!-- Modern ToolTip Stili -->
+        <Style TargetType="{x:Type ToolTip}">
+            <Setter Property="Background" Value="{DynamicResource BrushCardBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrushAccent}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="MaxWidth" Value="400"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToolTip}">
+                        <Border Background="{DynamicResource BrushCardBg}"
+                                BorderBrush="{DynamicResource BrushAccent}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="12" ShadowDepth="3" Opacity="0.45" Color="#000000"/>
+                            </Border.Effect>
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ==================== DETAYLI AYAR AÇIKLAMALARI (TOOLTIP KAYNAKLARI) ==================== -->
+        <!-- 1. Min CPU -->
+        <ToolTip x:Key="TipMinCpu">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="⚡ En Düşük İşlemci Durumu (Min CPU)" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="İşlemcinin boştayken veya hafif yük altındayken inebileceği en düşük çalışma frekansı tabanını belirler." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <TextBlock Text="💡 Tavsiye: %5 - %10. Boştayken voltaj ve frekansı düşürerek sistemin serin kalmasını ve pilden tasarruf edilmesini sağlar. %100 yapılması işlemcinin sürekli tam frekansta çalışıp ısınmasına yol açar." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 2. Max CPU -->
+        <ToolTip x:Key="TipMaxCpu">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="⚡ En Yüksek İşlemci Durumu (Max CPU)" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="İşlemcinin çıkabileceği tavan çalışma frekansı yüzdesini sınırlar." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <TextBlock Text="💡 Tavsiye: Normalde %100. Ancak aşırı ısınan ve fan sesi yüksek olan dizüstü bilgisayarlarda %99 yapıldığında bazı işlemcilerin Turbo Boost'a geçişi engellenerek sıcaklık anında 10-20°C düşürülebilir." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 3. Cooling Policy -->
+        <ToolTip x:Key="TipCooling">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="❄️ Sistem Soğutma İlkesi (Cooling Policy)" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="İşlemci ısındığında sistemin önce fan devrini mi artıracağını yoksa işlemciyi mi yavaşlatacağını belirler." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="• Etkin (Aktif Fan): Saat hızını düşürmeden önce fanları hızlandırır. Ağır işler ve oyunlar için tam performans sağlar." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,3"/>
+                        <TextBlock Text="• Edilgin (Sessiz): Fanları çalıştırmadan önce işlemci frekansını kısar. Kütüphane ve sessiz ortamlar için uygundur." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 4. Turbo Boost -->
+        <ToolTip x:Key="TipBoost">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="🚀 İşlemci Turbo Boost Modu" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="İşlemcinin temel saat hızının üzerine çıkarak dinamik hız aşırtma (Intel Turbo / AMD Precision Boost) yapma politikasını yönetir." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="• 0 - Devre Dışı: Turbo Boost'u kapatır; sıcaklığı 10-15°C düşürür, ani fan seslerini keser ve pil ömrünü ciddi oranda uzatır." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,3"/>
+                        <TextBlock Text="• 2 - Agresif: En ufak yükte dahi en yüksek GHz değerine kilitlenir (Maksimum oyun ve render hızı)." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,3"/>
+                        <TextBlock Text="• 3 - Verimli Etkin / 4 - Verimli Agresif: Sıcaklık ve güç tüketimini gözeterek dinamik boost uygular." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 5. Core Parking Min -->
+        <ToolTip x:Key="TipCoreParkMin">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="⚙️ Çekirdek Park Etme - Min Çekirdek" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="Düşük yük altındayken sürekli uyanık tutulması zorunlu olan en az işlemci çekirdeği yüzdesidir." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <TextBlock Text="💡 Tavsiye: Oyun oynarken ve rekabetçi FPS oyunlarında %100 yapılması önerilir. Çekirdeklerin uykuya geçip tekrar uyanırken neden olduğu anlık mikro takılmaları (micro-stutter / FPS drop) önler." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 6. Core Parking Max -->
+        <ToolTip x:Key="TipCoreParkMax">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="⚙️ Çekirdek Park Etme - Max Çekirdek" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="Sistemin devreye sokmasına izin verilen en fazla çekirdek yüzdesidir." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <TextBlock Text="💡 Tavsiye: %100. İşlemcinizin tüm çekirdeklerinin gerektiğinde tam güçle çalışabilmesi için %100'de tutulmalıdır." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 7. EPP -->
+        <ToolTip x:Key="TipEpp">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="🎯 Enerji Performansı Tercihi (EPP / Speed Shift)" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="İşlemcinin donanımsal güç kontrolcüsüne (Intel Speed Shift / AMD CPPC) hızlanma önceliğini bildirir (0 - 100 arası ölçek)." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="• 0: Saf Maksimum Performans (İşlemci en hızlı tepki süresiyle anında en yüksek frekansa fırlar)." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,3"/>
+                        <TextBlock Text="• 30-50: Dengeli günlük kullanım (Hız ve verimlilik dengesi)." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,3"/>
+                        <TextBlock Text="• 100: Maksimum Güç Tasarrufu (Yalnızca pilde uzun süre kullanım için)." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 8. PCIe ASPM -->
+        <ToolTip x:Key="TipPcie">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="🔌 PCI Express ASPM Güç Yönetimi" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="Ekran kartı ve NVMe M.2 SSD gibi PCIe veri yollarının boştayken düşük enerji moduna geçmesini sağlar." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="• Kapalı: Veri yolları daima uyanıktır. Sıfır gecikme sağlar; oyun ve yüksek hızlı dosya aktarımı için önerilir." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,3"/>
+                        <TextBlock Text="• Maksimum Tasarruf: Veri yollarını uyutarak pil ömrünü uzatır; ancak bazı harici cihazlarda kısa uyanma gecikmesi yapabilir." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 9. USB Selective Suspend -->
+        <ToolTip x:Key="TipUsb">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="🖱️ USB Seçici Askıya Alma" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="Boşta duran USB girişlerinin güç beslemesini keserek enerji tasarrufu yapmasını sağlar." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="• Devre Dışı: Fare, klavye, harici ses kartı (DAC) veya oyun kollarında uyku kaynaklı takılma ve gecikmeleri tamamen önler (Önerilen)." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,3"/>
+                        <TextBlock Text="• Etkin: Laptoplarda kullanılmayan USB aygıtlarını uyutarak pilden tasarruf sağlar." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 10. Wi-Fi Power Saving -->
+        <ToolTip x:Key="TipWifi">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="📶 Wi-Fi Bağdaştırıcısı Güç Tasarrufu" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="Kablosuz ağ kartınızın güç tüketimini ve dinleme sıklığını yönetir." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="• Maksimum Performans: Wi-Fi kartı sürekli tam güçte çalışır. Online oyunlarda ping dalgalanması ve paket kaybını (jitter) önler." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,3"/>
+                        <TextBlock Text="• Maksimum Tasarruf: Veri aktarılmadığında Wi-Fi çipini uykuya geçirir; pilden tasarruf sağlar." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 11. Video Timeout -->
+        <ToolTip x:Key="TipVideo">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="🖥️ Ekranı Kapatma Süresi" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="Bilgisayar başında işlem yapılmadığında monitörün kaç dakika sonra sinyali kesip uyku moduna geçeceğini belirler." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <TextBlock Text="💡 Tavsiye: 'Hiçbir zaman' seçilirse ekran asla kapanmaz. OLED ve IPS ekran ömrünü korumak ve enerji tasarrufu için 10-15 dakika önerilir." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 12. Sleep Timeout -->
+        <ToolTip x:Key="TipSleep">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="🌙 Sistem Uyku Süresi" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="İşlem yapılmadığında bilgisayarın açık pencereleri RAM bellekte tutarak düşük enerji tüketimli uyku moduna geçeceği süredir." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <TextBlock Text="💡 Tavsiye: Tuşa basıldığında saniyeler içinde uyanır. Arka planda indirme veya render yapıyorsanız 'Hiçbir zaman' yapmanız önerilir." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 13. Hibernate Timeout -->
+        <ToolTip x:Key="TipHibernate">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="💤 Hazırda Bekletme Süresi" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="RAM bellekteki tüm açık oturum ve programları sabit diske kaydederek bilgisayarı sıfır elektrik tüketecek şekilde kapatır." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <TextBlock Text="💡 Tavsiye: Bilgisayar uzun süre kullanılmadığında pilin tükenmesini önler. Açıldığında tüm açık pencereleriniz aynen geri yüklenir." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 14. Disk Timeout -->
+        <ToolTip x:Key="TipDisk">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="💾 Sabit Diski Kapatma Süresi" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="Mekanik manyetik sabit disklerin (HDD) boştayken motorunu durdurarak kafa park etme süresidir." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <TextBlock Text="💡 Not: Modern NVMe M.2 ve SATA SSD'lerde mekanik dönen parça olmadığı için bu ayar SSD'leri etkilemez; sadece mekanik HDD'lerde tasarruf sağlar." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 15. Wake Timers -->
+        <ToolTip x:Key="TipWakeTimers">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="⏰ Zamanlanmış Uyandırma İzinleri (Wake Timers)" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="Windows Güncelleştirmeleri veya zamanlanmış görevlerin bilgisayarı uykudan kendi kendine uyandırmasını denetler." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="• Devre Dışı: Bilgisayarın gece masada veya çantasındayken kendiliğinden açılmasını kesin olarak engeller (Önerilen)." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,3"/>
+                        <TextBlock Text="• Etkin / Yalnızca Önemli: Planlanmış sistem yedeklemeleri veya bakım görevleri için uyanmaya izin verir." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 16. Power Button -->
+        <ToolTip x:Key="TipPowerBtn">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="🔘 Güç Düğmesi Eylemi" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="Kasa üzerindeki veya laptoptaki fiziksel Güç düğmesine basıldığında uygulanacak işlemi belirler." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <TextBlock Text="💡 Kapat, Uyku, Hazırda Beklet veya yanlışlıkla basma ihtimaline karşı 'Hiçbir şey yapma' seçeneklerinden birini atayabilirsiniz." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+
+        <!-- 17. Sleep Button -->
+        <ToolTip x:Key="TipSleepBtn">
+            <StackPanel MaxWidth="380">
+                <TextBlock Text="⌨️ Uyku Düğmesi Eylemi" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" FontSize="12" Margin="0,0,0,4"/>
+                <TextBlock Text="Klavyenizde veya kasada bulunan özel 'Sleep' / 'Ay' simgeli tuşa basıldığında tetiklenecek eylemdir." TextWrapping="Wrap" Margin="0,0,0,6" Foreground="{DynamicResource BrushTextPrimary}"/>
+                <Border Background="{DynamicResource BrushHeaderBg}" CornerRadius="5" Padding="8,5" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                    <TextBlock Text="💡 Uyku veya Hazırda Beklet için yapılandırabilir ya da kazara basmayı önlemek için 'Hiçbir şey yapma' yapabilirsiniz." TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </Border>
+            </StackPanel>
+        </ToolTip>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header -->
+            <RowDefinition Height="*"/>    <!-- Unified Dashboard Body -->
+            <RowDefinition Height="Auto"/> <!-- Action Buttons -->
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource BrushHeaderBg}" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <Border Background="{DynamicResource BrushAccentGlow}" CornerRadius="6" Padding="8,6" Margin="0,0,12,0" VerticalAlignment="Center">
+                        <TextBlock Text="⚡" FontSize="20" Foreground="{DynamicResource BrushAccent}"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtPlanTitle" Text="Güç Planı Ayarları" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource BrushTextPrimary}"/>
+                        <TextBlock x:Name="TxtPlanGuid" Text="GUID: ..." FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+                <Border Grid.Column="1" Background="{DynamicResource BrushAccentGlow}" CornerRadius="4" Padding="8,4" VerticalAlignment="Center">
+                    <TextBlock x:Name="TxtDeviceType" Text="💻 Taşınabilir PC (Priz &amp; Pil Ayarları)" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource BrushAccent}"/>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Unified Dashboard Body (Tüm Ayarlar Tek Ekranda - 2 Kolonlu Düzen) -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,4,0">
+            <StackPanel>
+                <!-- Bilgilendirme ve İpucu Bandı -->
+                <Border Background="{DynamicResource BrushCardBg}" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="💡" FontSize="15" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBlock Grid.Column="1" Text="Detaylı bilgi için farenizi ayarların veya başlıkların üzerine getirin. (Ne işe yaradığı, ısınma/performans etkisi ve tavsiye edilen ayarlar görüntülenir)" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                    </Grid>
+                </Border>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="14"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- ==================== SOL KOLON (İŞLEMCİ & DONANIM) ==================== -->
+                    <StackPanel Grid.Column="0">
+                        <!-- 1. Temel İşlemci Limitleri & Soğutma -->
+                        <GroupBox Header="⚡ İşlemci Güç Limitleri ve Soğutma">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*" x:Name="ColDcCpu"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="1" x:Name="LblAcHeaderCpu" Text="🔌 Prizde (AC)" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}" Margin="2,0,0,6"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" x:Name="LblDcHeaderCpu" Text="🔋 Pilde (DC)" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}" Margin="2,0,0,6"/>
+
+                                <!-- Min CPU -->
+                                <Label Grid.Row="1" Grid.Column="0" Content="En Düşük İşlemci ℹ:" ToolTip="{StaticResource TipMinCpu}"/>
+                                <Grid Grid.Row="1" Grid.Column="1" Margin="2,2,4,2" ToolTip="{StaticResource TipMinCpu}">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions>
+                                    <Slider x:Name="SldMinCpuAc" ValueChanged="SldMinCpuAc_ValueChanged"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=SldMinCpuAc, Path=Value, StringFormat={}{0:0}%}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="2" x:Name="GridMinCpuDc" Margin="2,2,2,2" ToolTip="{StaticResource TipMinCpu}">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions>
+                                    <Slider x:Name="SldMinCpuDc" ValueChanged="SldMinCpuDc_ValueChanged"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=SldMinCpuDc, Path=Value, StringFormat={}{0:0}%}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}"/>
+                                </Grid>
+
+                                <!-- Max CPU -->
+                                <Label Grid.Row="2" Grid.Column="0" Content="En Yüksek İşlemci ℹ:" ToolTip="{StaticResource TipMaxCpu}"/>
+                                <Grid Grid.Row="2" Grid.Column="1" Margin="2,2,4,2" ToolTip="{StaticResource TipMaxCpu}">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions>
+                                    <Slider x:Name="SldMaxCpuAc" ValueChanged="SldMaxCpuAc_ValueChanged"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=SldMaxCpuAc, Path=Value, StringFormat={}{0:0}%}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="2" x:Name="GridMaxCpuDc" Margin="2,2,2,2" ToolTip="{StaticResource TipMaxCpu}">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions>
+                                    <Slider x:Name="SldMaxCpuDc" ValueChanged="SldMaxCpuDc_ValueChanged"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=SldMaxCpuDc, Path=Value, StringFormat={}{0:0}%}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}"/>
+                                </Grid>
+
+                                <!-- Soğutma İlkesi -->
+                                <Label Grid.Row="3" Grid.Column="0" Content="Soğutma İlkesi ℹ:" ToolTip="{StaticResource TipCooling}"/>
+                                <ComboBox Grid.Row="3" Grid.Column="1" x:Name="CmbCoolingAc" Margin="2,2,4,2" ToolTip="{StaticResource TipCooling}">
+                                    <ComboBoxItem Content="Etkin (Aktif Fan)"/>
+                                    <ComboBoxItem Content="Edilgin (Sessiz)"/>
+                                </ComboBox>
+                                <ComboBox Grid.Row="3" Grid.Column="2" x:Name="CmbCoolingDc" Margin="2,2,2,2" ToolTip="{StaticResource TipCooling}">
+                                    <ComboBoxItem Content="Etkin (Aktif Fan)"/>
+                                    <ComboBoxItem Content="Edilgin (Sessiz)"/>
+                                </ComboBox>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- 2. Turbo Boost, Çekirdek Park & EPP -->
+                        <GroupBox Header="🚀 Turbo Boost, Çekirdek Park &amp; EPP">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*" x:Name="ColDcBoost"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Turbo Boost Modu -->
+                                <Label Grid.Row="0" Grid.Column="0" Content="Turbo Boost Modu ℹ:" ToolTip="{StaticResource TipBoost}"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="CmbBoostAc" Margin="2,2,4,2" ToolTip="{StaticResource TipBoost}">
+                                    <ComboBoxItem Content="0 - Devre Dışı (Serin)"/>
+                                    <ComboBoxItem Content="1 - Etkin"/>
+                                    <ComboBoxItem Content="2 - Agresif (Maks Hız)"/>
+                                    <ComboBoxItem Content="3 - Verimli Etkin"/>
+                                    <ComboBoxItem Content="4 - Verimli Agresif"/>
+                                    <ComboBoxItem Content="5 - Agresif Garantili"/>
+                                </ComboBox>
+                                <ComboBox Grid.Row="0" Grid.Column="2" x:Name="CmbBoostDc" Margin="2,2,2,2" ToolTip="{StaticResource TipBoost}">
+                                    <ComboBoxItem Content="0 - Devre Dışı (Serin)"/>
+                                    <ComboBoxItem Content="1 - Etkin"/>
+                                    <ComboBoxItem Content="2 - Agresif (Maks Hız)"/>
+                                    <ComboBoxItem Content="3 - Verimli Etkin"/>
+                                    <ComboBoxItem Content="4 - Verimli Agresif"/>
+                                    <ComboBoxItem Content="5 - Agresif Garantili"/>
+                                </ComboBox>
+
+                                <!-- Core Parking Min Cores -->
+                                <Label Grid.Row="1" Grid.Column="0" Content="Park Min Çekirdek ℹ:" ToolTip="{StaticResource TipCoreParkMin}"/>
+                                <Grid Grid.Row="1" Grid.Column="1" Margin="2,2,4,2" ToolTip="{StaticResource TipCoreParkMin}">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions>
+                                    <Slider x:Name="SldCoreParkMinAc"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=SldCoreParkMinAc, Path=Value, StringFormat={}{0:0}%}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="2" x:Name="GridCoreParkMinDc" Margin="2,2,2,2" ToolTip="{StaticResource TipCoreParkMin}">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions>
+                                    <Slider x:Name="SldCoreParkMinDc"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=SldCoreParkMinDc, Path=Value, StringFormat={}{0:0}%}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}"/>
+                                </Grid>
+
+                                <!-- Core Parking Max Cores -->
+                                <Label Grid.Row="2" Grid.Column="0" Content="Park Max Çekirdek ℹ:" ToolTip="{StaticResource TipCoreParkMax}"/>
+                                <Grid Grid.Row="2" Grid.Column="1" Margin="2,2,4,2" ToolTip="{StaticResource TipCoreParkMax}">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions>
+                                    <Slider x:Name="SldCoreParkMaxAc"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=SldCoreParkMaxAc, Path=Value, StringFormat={}{0:0}%}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="2" x:Name="GridCoreParkMaxDc" Margin="2,2,2,2" ToolTip="{StaticResource TipCoreParkMax}">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions>
+                                    <Slider x:Name="SldCoreParkMaxDc"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=SldCoreParkMaxDc, Path=Value, StringFormat={}{0:0}%}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}"/>
+                                </Grid>
+
+                                <!-- Enerji Tercihi (EPP / HWP) -->
+                                <Label Grid.Row="3" Grid.Column="0" Content="Enerji Tercihi (EPP) ℹ:" ToolTip="{StaticResource TipEpp}"/>
+                                <Grid Grid.Row="3" Grid.Column="1" Margin="2,2,4,2" ToolTip="{StaticResource TipEpp}">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions>
+                                    <Slider x:Name="SldEppAc"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=SldEppAc, Path=Value, StringFormat={}{0:0}}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="2" x:Name="GridEppDc" Margin="2,2,2,2" ToolTip="{StaticResource TipEpp}">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions>
+                                    <Slider x:Name="SldEppDc"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=SldEppDc, Path=Value, StringFormat={}{0:0}}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}"/>
+                                </Grid>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- 3. Donanım & Çevre Birimleri -->
+                        <GroupBox Header="🔌 Donanım, PCIe &amp; Çevre Birimleri">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*" x:Name="ColDcPcie"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- PCI Express ASPM -->
+                                <Label Grid.Row="0" Grid.Column="0" Content="PCIe Durumu (ASPM) ℹ:" ToolTip="{StaticResource TipPcie}"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="CmbPcieAc" Margin="2,2,4,2" ToolTip="{StaticResource TipPcie}">
+                                    <ComboBoxItem Content="Kapalı (Maks Performans)"/>
+                                    <ComboBoxItem Content="Orta Düzey Tasarruf"/>
+                                    <ComboBoxItem Content="Maksimum Güç Tasarrufu"/>
+                                </ComboBox>
+                                <ComboBox Grid.Row="0" Grid.Column="2" x:Name="CmbPcieDc" Margin="2,2,2,2" ToolTip="{StaticResource TipPcie}">
+                                    <ComboBoxItem Content="Kapalı (Maks Performans)"/>
+                                    <ComboBoxItem Content="Orta Düzey Tasarruf"/>
+                                    <ComboBoxItem Content="Maksimum Güç Tasarrufu"/>
+                                </ComboBox>
+
+                                <!-- USB Seçici Askıya Alma -->
+                                <Label Grid.Row="1" Grid.Column="0" Content="USB Askıya Alma ℹ:" ToolTip="{StaticResource TipUsb}"/>
+                                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="CmbUsbAc" Margin="2,2,4,2" ToolTip="{StaticResource TipUsb}">
+                                    <ComboBoxItem Content="Devre Dışı (Sıfır Gecikme)"/>
+                                    <ComboBoxItem Content="Etkin (Tasarruf)"/>
+                                </ComboBox>
+                                <ComboBox Grid.Row="1" Grid.Column="2" x:Name="CmbUsbDc" Margin="2,2,2,2" ToolTip="{StaticResource TipUsb}">
+                                    <ComboBoxItem Content="Devre Dışı (Sıfır Gecikme)"/>
+                                    <ComboBoxItem Content="Etkin (Tasarruf)"/>
+                                </ComboBox>
+
+                                <!-- Wi-Fi Tasarrufu -->
+                                <Label Grid.Row="2" Grid.Column="0" Content="Wi-Fi Güç Modu ℹ:" ToolTip="{StaticResource TipWifi}"/>
+                                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="CmbWifiAc" Margin="2,2,4,2" ToolTip="{StaticResource TipWifi}">
+                                    <ComboBoxItem Content="Maksimum Performans"/>
+                                    <ComboBoxItem Content="Düşük Güç Tasarrufu"/>
+                                    <ComboBoxItem Content="Orta Düzey Tasarruf"/>
+                                    <ComboBoxItem Content="Maksimum Tasarruf"/>
+                                </ComboBox>
+                                <ComboBox Grid.Row="2" Grid.Column="2" x:Name="CmbWifiDc" Margin="2,2,2,2" ToolTip="{StaticResource TipWifi}">
+                                    <ComboBoxItem Content="Maksimum Performans"/>
+                                    <ComboBoxItem Content="Düşük Güç Tasarrufu"/>
+                                    <ComboBoxItem Content="Orta Düzey Tasarruf"/>
+                                    <ComboBoxItem Content="Maksimum Tasarruf"/>
+                                </ComboBox>
+                            </Grid>
+                        </GroupBox>
+                    </StackPanel>
+
+                    <!-- ==================== SAĞ KOLON (SÜRELER & DÜĞMELER) ==================== -->
+                    <StackPanel Grid.Column="2">
+                        <!-- 4. Ekran, Uyku & Disk Süreleri -->
+                        <GroupBox Header="⏱️ Ekran, Uyku ve Disk Süreleri">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*" x:Name="ColDcTimeouts"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="1" x:Name="LblAcHeaderTimeouts" Text="🔌 Prizde (AC)" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}" Margin="2,0,0,6"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" x:Name="LblDcHeaderTimeouts" Text="🔋 Pilde (DC)" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}" Margin="2,0,0,6"/>
+
+                                <!-- Ekran Kapatma -->
+                                <Label Grid.Row="1" Grid.Column="0" Content="Ekranı Kapat ℹ:" ToolTip="{StaticResource TipVideo}"/>
+                                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="CmbVideoAc" Margin="2,2,4,2" ToolTip="{StaticResource TipVideo}"/>
+                                <ComboBox Grid.Row="1" Grid.Column="2" x:Name="CmbVideoDc" Margin="2,2,2,2" ToolTip="{StaticResource TipVideo}"/>
+
+                                <!-- Uykuya Geçme -->
+                                <Label Grid.Row="2" Grid.Column="0" Content="Uykuya Geç ℹ:" ToolTip="{StaticResource TipSleep}"/>
+                                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="CmbSleepAc" Margin="2,2,4,2" ToolTip="{StaticResource TipSleep}"/>
+                                <ComboBox Grid.Row="2" Grid.Column="2" x:Name="CmbSleepDc" Margin="2,2,2,2" ToolTip="{StaticResource TipSleep}"/>
+
+                                <!-- Hazırda Bekletme -->
+                                <Label Grid.Row="3" Grid.Column="0" Content="Hazırda Beklet ℹ:" ToolTip="{StaticResource TipHibernate}"/>
+                                <ComboBox Grid.Row="3" Grid.Column="1" x:Name="CmbHibernateAc" Margin="2,2,4,2" ToolTip="{StaticResource TipHibernate}"/>
+                                <ComboBox Grid.Row="3" Grid.Column="2" x:Name="CmbHibernateDc" Margin="2,2,2,2" ToolTip="{StaticResource TipHibernate}"/>
+
+                                <!-- Sabit Diski Kapatma -->
+                                <Label Grid.Row="4" Grid.Column="0" Content="Sabit Diski Kapat ℹ:" ToolTip="{StaticResource TipDisk}"/>
+                                <ComboBox Grid.Row="4" Grid.Column="1" x:Name="CmbDiskAc" Margin="2,2,4,2" ToolTip="{StaticResource TipDisk}"/>
+                                <ComboBox Grid.Row="4" Grid.Column="2" x:Name="CmbDiskDc" Margin="2,2,2,2" ToolTip="{StaticResource TipDisk}"/>
+
+                                <!-- Uyandırma Zamanlayıcıları -->
+                                <Label Grid.Row="5" Grid.Column="0" Content="Uyandırma Zamanı ℹ:" ToolTip="{StaticResource TipWakeTimers}"/>
+                                <ComboBox Grid.Row="5" Grid.Column="1" x:Name="CmbWakeTimersAc" Margin="2,2,4,2" ToolTip="{StaticResource TipWakeTimers}">
+                                    <ComboBoxItem Content="Devre Dışı"/>
+                                    <ComboBoxItem Content="Etkin"/>
+                                    <ComboBoxItem Content="Yalnızca Önemli"/>
+                                </ComboBox>
+                                <ComboBox Grid.Row="5" Grid.Column="2" x:Name="CmbWakeTimersDc" Margin="2,2,2,2" ToolTip="{StaticResource TipWakeTimers}">
+                                    <ComboBoxItem Content="Devre Dışı"/>
+                                    <ComboBoxItem Content="Etkin"/>
+                                    <ComboBoxItem Content="Yalnızca Önemli"/>
+                                </ComboBox>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- 5. Kasa ve Klavye Güç Düğmeleri -->
+                        <GroupBox Header="🔘 Güç ve Uyku Düğmeleri Eylemleri">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*" x:Name="ColDcButtons"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Güç Düğmesi -->
+                                <Label Grid.Row="0" Grid.Column="0" Content="Güç Düğmesi ℹ:" ToolTip="{StaticResource TipPowerBtn}"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="CmbPowerBtnAc" Margin="2,2,4,2" ToolTip="{StaticResource TipPowerBtn}">
+                                    <ComboBoxItem Content="Hiçbir şey yapma"/>
+                                    <ComboBoxItem Content="Uyku"/>
+                                    <ComboBoxItem Content="Hazırda Beklet"/>
+                                    <ComboBoxItem Content="Bilgisayarı Kapat"/>
+                                </ComboBox>
+                                <ComboBox Grid.Row="0" Grid.Column="2" x:Name="CmbPowerBtnDc" Margin="2,2,2,2" ToolTip="{StaticResource TipPowerBtn}">
+                                    <ComboBoxItem Content="Hiçbir şey yapma"/>
+                                    <ComboBoxItem Content="Uyku"/>
+                                    <ComboBoxItem Content="Hazırda Beklet"/>
+                                    <ComboBoxItem Content="Bilgisayarı Kapat"/>
+                                </ComboBox>
+
+                                <!-- Uyku Düğmesi -->
+                                <Label Grid.Row="1" Grid.Column="0" Content="Uyku Düğmesi ℹ:" ToolTip="{StaticResource TipSleepBtn}"/>
+                                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="CmbSleepBtnAc" Margin="2,2,4,2" ToolTip="{StaticResource TipSleepBtn}">
+                                    <ComboBoxItem Content="Hiçbir şey yapma"/>
+                                    <ComboBoxItem Content="Uyku"/>
+                                    <ComboBoxItem Content="Hazırda Beklet"/>
+                                    <ComboBoxItem Content="Bilgisayarı Kapat"/>
+                                </ComboBox>
+                                <ComboBox Grid.Row="1" Grid.Column="2" x:Name="CmbSleepBtnDc" Margin="2,2,2,2" ToolTip="{StaticResource TipSleepBtn}">
+                                    <ComboBoxItem Content="Hiçbir şey yapma"/>
+                                    <ComboBoxItem Content="Uyku"/>
+                                    <ComboBoxItem Content="Hazırda Beklet"/>
+                                    <ComboBoxItem Content="Bilgisayarı Kapat"/>
+                                </ComboBox>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- 6. İpuçları ve Bilgi Kartı -->
+                        <Border Background="{DynamicResource BrushCardBg}" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1" CornerRadius="7" Padding="12" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="💡 Performans &amp; Sıcaklık İpuçları" FontWeight="Bold" Foreground="{DynamicResource BrushAccent}" Margin="0,0,0,6"/>
+                                <TextBlock Text="• Laptoplarda aşırı ısınmayı önlemek için Turbo Boost Modunu '0 - Devre Dışı' yapabilirsiniz (Performanstan ödün vermeden sıcaklığı 10-15°C düşürür)." FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" TextWrapping="Wrap" Margin="0,0,0,4"/>
+                                <TextBlock Text="• Oyunlarda takılmaları (micro-stutter) engellemek için Çekirdek Park Min değerini %100 yapın." FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Action Buttons -->
+        <Border Grid.Row="2" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="0,1,0,0" Padding="0,12,0,0" Margin="0,10,0,0">
+            <Grid>
+                <!-- Sol Taraftaki Araçlar -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button x:Name="BtnUnlockHidden" Style="{StaticResource UnlockBtn}" Content="🔓 Gizli Ayarları Aç" Padding="12,6" Margin="0,0,8,0" Click="BtnUnlockHidden_Click" ToolTip="Windows'un kendi Denetim Masasında da bu gizli menülerin görünmesini sağlar"/>
+                    <Button x:Name="BtnLockHidden" Style="{StaticResource LockBtn}" Content="🔒 Gizli Ayarları Kapat" Padding="12,6" Margin="0,0,8,0" Click="BtnLockHidden_Click" ToolTip="Windows Denetim Masasındaki gelişmiş güç ayarlarını tekrar gizler ve kilitler"/>
+                    <Button x:Name="BtnAdvanced" Style="{StaticResource ModernBtn}" Content="⚙️ Windows Gelişmiş Ayarlar..." Padding="12,6" Click="BtnAdvanced_Click"/>
+                </StackPanel>
+
+                <!-- Sağ Taraftaki Kaydet / İptal -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="BtnSave" Style="{StaticResource PrimaryBtn}" Content="💾 Kaydet ve Uygula" Padding="18,6" Margin="0,0,8,0" Click="BtnSave_Click"/>
+                    <Button x:Name="BtnCancel" Style="{StaticResource ModernBtn}" Content="İptal" Padding="14,6" Click="BtnCancel_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
