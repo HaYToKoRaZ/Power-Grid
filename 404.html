@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | Power Grid HaYTooL</title>
+  
+  <meta name="description" content="The page you are looking for could not be found. Return to Power Grid HaYTooL homepage.">
+  <meta name="author" content="HaYTo">
+  <meta name="publisher" content="HaYTooL">
+  
+  <!-- Open Graph & Twitter -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="404 - Page Not Found | Power Grid HaYTooL">
+  <meta property="og:description" content="The page you are looking for could not be found. Return to Power Grid HaYTooL homepage.">
+  <meta property="og:url" content="https://haytokoraz.github.io/Power-Grid/404.html">
+  <meta property="og:image" content="https://haytokoraz.github.io/Power-Grid/mascot_404.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="404 - Page Not Found | Power Grid HaYTooL">
+  <meta name="twitter:image" content="https://haytokoraz.github.io/Power-Grid/mascot_404.png">
+  <!-- Favicon, Apple Touch Icon & Web App Manifest -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Non-Blocking Google Fonts & Preload -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  </noscript>
+
+  <!-- Preload & Asynchronous Non-Blocking Stylesheet -->
+  <link rel="preload" href="style.css?v=1.3" as="style">
+  <link rel="stylesheet" href="style.css?v=1.3" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="style.css?v=1.3"></noscript>
+  <style>
+    .error-container {
+      min-height: calc(100vh - 74px - 100px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    .error-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 50px 36px;
+      max-width: 660px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .error-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-red), var(--accent-amber), var(--primary));
+    }
+
+    .error-mascot-box {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .error-mascot-img {
+      width: 175px;
+      height: 175px;
+      border-radius: var(--radius-lg);
+      object-fit: cover;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      border: 2px solid rgba(239, 68, 68, 0.5);
+      animation: gentle-wobble 4s ease-in-out infinite;
+    }
+
+    @keyframes gentle-wobble {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(1deg); }
+    }
+
+    .error-code {
+      font-family: var(--font-display);
+      font-size: clamp(4.5rem, 10vw, 6.5rem);
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent-amber) 0%, var(--accent-red) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.04em;
+    }
+
+    .error-title {
+      font-size: 1.75rem;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .error-desc {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .error-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .error-contact-box {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .error-contact-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .error-contact-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .error-contact-links a {
+      font-size: 0.85rem;
+      padding: 6px 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="index.html" class="nav-brand">
+        <picture>
+          <source srcset="logo-42.webp 1x, logo-84.webp 2x" type="image/webp">
+          <img src="logo.png" alt="Power Grid Logo" width="42" height="42">
+        </picture>
+        <span>Power Grid</span>
+      </a>
+
+      <div class="nav-actions">
+        <!-- SVG Flag Language Switcher -->
+        <button id="lang-toggle-btn" class="btn-control" title="Dili Değiştir / Switch Language">
+          <svg class="flag-icon" viewBox="0 0 60 30" width="18" height="12" style="border-radius:2px; vertical-align:middle; display:inline-block; margin-right:6px;"><clipPath id="s404"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t404"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s404)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t404)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+          English
+        </button>
+        <button id="theme-toggle-btn" class="btn-control" title="Temayı Değiştir / Toggle Theme">
+          ☀️ <span class="hide-mobile">Aydınlık</span>
+        </button>
+        <a href="index.html" class="btn-primary" data-i18n="btn_home">Ana Sayfa</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="error-container">
+    <div class="error-card">
+      <div class="error-mascot-box">
+        <picture>
+          <source srcset="mascot_404-175.webp 1x, mascot_404.webp 2x" type="image/webp">
+          <img src="mascot_404.png" alt="404 Disconnected Power Cat Mascot" class="error-mascot-img" width="175" height="175" fetchpriority="high">
+        </picture>
+      </div>
+      <div class="error-code">404</div>
+      <h1 class="error-title" data-i18n="err_title">Güç Kesintisi: Sayfa Bulunamadı</h1>
+      <p class="error-desc" data-i18n="err_desc">
+        Ulaşmaya çalıştığınız sayfa taşınmış, silinmiş veya geçici olarak devre dışı kalmış olabilir. Sistem güç hattı bu adrese enerji iletemiyor.
+      </p>
+
+      <div class="error-actions">
+        <a href="index.html" class="btn-primary" data-i18n="btn_back_home">
+          🏠 Ana Sayfaya Dön
+        </a>
+        <a href="https://github.com/HaYToKoRaZ/Power-Grid" target="_blank" rel="noopener noreferrer nofollow" class="btn-secondary" data-i18n="btn_github">
+          ⭐ GitHub Deposu
+        </a>
+      </div>
+
+      <!-- Direct Contact & Support Links -->
+      <div class="error-contact-box">
+        <span class="error-contact-title" data-i18n="err_contact_title">Doğrudan İletişim ve Destek Kanalları</span>
+        <div class="error-contact-links">
+          <a href="mailto:korazhayto@gmail.com" class="btn-control" data-i18n="err_btn_mail">
+            📧 E-Posta Gönder
+          </a>
+          <a href="https://github.com/HaYToKoRaZ/Power-Grid/issues" target="_blank" rel="noopener noreferrer nofollow" class="btn-control" data-i18n="err_btn_issue">
+            🐛 GitHub Sorun Bildir
+          </a>
+          <a href="https://haytokoraz.github.io/" target="_blank" rel="noopener noreferrer nofollow" class="btn-control" data-i18n="err_btn_portal">
+            🏛️ HaYTooL Portalı
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <div class="footer-brand">
+        <strong>Power Grid HaYTooL</strong> — <span data-i18n="footer_rights">Power Grid HaYTooL, HaYTooL Portalının resmi açık kaynak projesidir.</span>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://github.com/HaYToKoRaZ/Power-Grid" target="_blank" rel="noopener noreferrer nofollow">GitHub</a>
+        <a href="https://haytokoraz.github.io/" target="_blank" rel="noopener noreferrer nofollow">HaYTooL Portal</a>
+        <a href="mailto:korazhayto@gmail.com" data-i18n="footer_contact">İletişim</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const FLAG_TR_SVG = `<svg class="flag-icon" viewBox="0 0 1200 800" width="18" height="12" style="border-radius:2px; vertical-align:middle; display:inline-block; margin-right:6px;"><rect width="1200" height="800" fill="#E30A17"/><circle cx="425" cy="400" r="200" fill="#ffffff"/><circle cx="475" cy="400" r="160" fill="#E30A17"/><polygon points="583.33,400 706.75,440.11 659.71,319.89 659.71,480.11 706.75,359.89" fill="#ffffff" transform="rotate(-18 583.33 400)"/></svg>`;
+    const FLAG_EN_SVG = `<svg class="flag-icon" viewBox="0 0 60 30" width="18" height="12" style="border-radius:2px; vertical-align:middle; display:inline-block; margin-right:6px;"><clipPath id="s_sc4"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t_sc4"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s_sc4)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t_sc4)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>`;
+
+    const errTranslations = {
+      tr: {
+        err_title: "Güç Kesintisi: Sayfa Bulunamadı",
+        err_desc: "Ulaşmaya çalıştığınız sayfa taşınmış, silinmiş veya geçici olarak devre dışı kalmış olabilir. Sistem güç hattı bu adrese enerji iletemiyor.",
+        btn_home: "Ana Sayfa",
+        btn_back_home: "🏠 Ana Sayfaya Dön",
+        btn_github: "⭐ GitHub Deposu",
+        err_contact_title: "Doğrudan İletişim ve Destek Kanalları",
+        err_btn_mail: "📧 E-Posta Gönder",
+        err_btn_issue: "🐛 GitHub Sorun Bildir",
+        err_btn_portal: "🏛️ HaYTooL Portalı",
+        footer_rights: "Power Grid HaYTooL, HaYTooL Portalının resmi açık kaynak projesidir.",
+        footer_contact: "İletişim"
+      },
+      en: {
+        err_title: "Power Outage: Page Not Found",
+        err_desc: "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
+        btn_home: "Home",
+        btn_back_home: "🏠 Return to Home",
+        btn_github: "⭐ GitHub Repository",
+        err_contact_title: "Direct Contact & Support Channels",
+        err_btn_mail: "📧 Send Email",
+        err_btn_issue: "🐛 Report GitHub Issue",
+        err_btn_portal: "🏛️ HaYTooL Portal",
+        footer_rights: "Power Grid HaYTooL is an official open-source project of the HaYTooL Portal.",
+        footer_contact: "Contact"
+      }
+    };
+
+    let curLang = localStorage.getItem('powergrid_lang') || 'tr';
+    let curTheme = localStorage.getItem('powergrid_theme') || 'dark';
+
+    function setAppTheme(t) {
+      curTheme = t;
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('powergrid_theme', t);
+      const btn = document.getElementById('theme-toggle-btn');
+      if (btn) btn.innerHTML = t === 'dark' ? '☀️ <span class="hide-mobile">Aydınlık</span>' : '🌙 <span class="hide-mobile">Karanlık</span>';
+    }
+
+    function setAppLang(l) {
+      curLang = l;
+      localStorage.setItem('powergrid_lang', l);
+      const dict = errTranslations[l] || errTranslations.tr;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.getAttribute('data-i18n');
+        if (dict[k]) el.innerHTML = dict[k];
+      });
+      const btn = document.getElementById('lang-toggle-btn');
+      if (btn) btn.innerHTML = l === 'tr' ? `${FLAG_EN_SVG} English` : `${FLAG_TR_SVG} Türkçe`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setAppTheme(curTheme);
+      setAppLang(curLang);
+      document.getElementById('theme-toggle-btn').addEventListener('click', () => setAppTheme(curTheme === 'dark' ? 'light' : 'dark'));
+      document.getElementById('lang-toggle-btn').addEventListener('click', () => setAppLang(curLang === 'tr' ? 'en' : 'tr'));
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
+      }
+    });
+  </script>
+</body>
+</html>

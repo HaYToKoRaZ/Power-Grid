@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Power Grid HaYTooL - Intelligent Windows Power & GPU Manager</title>
+  
+  <!-- SEO & Social Meta Tags (Modern Clean SEO - No Deprecated Keywords) -->
+  <meta name="description" content="Intelligent Windows power manager switching plans by GPU load. Slashes idle wattage, cuts latency, and stops in-game micro-stuttering for peak FPS.">
+  <meta name="author" content="HaYTo">
+  <meta name="publisher" content="HaYTooL">
+  
+  <!-- Facebook & Open Graph Meta Tags (ogp.me) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Power Grid HaYTooL">
+  <meta property="og:url" content="https://haytokoraz.github.io/Power-Grid/">
+  <meta property="og:title" content="Power Grid HaYTooL - Intelligent Windows Power & GPU Manager">
+  <meta property="og:description" content="Intelligent Windows power manager switching plans by GPU load. Slashes idle wattage, cuts latency, and stops in-game micro-stuttering for peak FPS.">
+  <meta property="og:image" content="https://haytokoraz.github.io/Power-Grid/screenshots/main_window.png">
+  <meta property="og:image:secure_url" content="https://haytokoraz.github.io/Power-Grid/screenshots/main_window.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="800">
+  <meta property="og:image:alt" content="Power Grid HaYTooL Interface & Smart GPU Switcher">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="tr_TR">
+
+  <!-- Twitter / X Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@HaYToKoRaZ">
+  <meta name="twitter:creator" content="@HaYToKoRaZ">
+  <meta name="twitter:url" content="https://haytokoraz.github.io/Power-Grid/">
+  <meta name="twitter:title" content="Power Grid HaYTooL - Intelligent Windows Power & GPU Manager">
+  <meta name="twitter:description" content="Intelligent Windows power manager switching plans by GPU load. Slashes idle wattage, cuts latency, and stops in-game micro-stuttering for peak FPS.">
+  <meta name="twitter:image" content="https://haytokoraz.github.io/Power-Grid/screenshots/main_window.png">
+  <meta name="twitter:image:alt" content="Power Grid HaYTooL Interface & Smart GPU Switcher">
+
+  <meta name="theme-color" content="#080C14">
+  <link rel="canonical" href="https://haytokoraz.github.io/Power-Grid/">
+  <link rel="alternate" hreflang="tr" href="https://haytokoraz.github.io/Power-Grid/?lang=tr">
+  <link rel="alternate" hreflang="en" href="https://haytokoraz.github.io/Power-Grid/?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://haytokoraz.github.io/Power-Grid/">
+
+  <!-- Favicon, Apple Touch Icon & Web App Manifest -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Structured Data / JSON-LD Schema (SoftwareApplication & Organization) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Power Grid HaYTooL",
+    "operatingSystem": "Windows 10, Windows 11",
+    "applicationCategory": "UtilitiesApplication",
+    "description": "Next-generation intelligent Windows power management and autonomous GPU-driven power plan switching utility.",
+    "url": "https://haytokoraz.github.io/Power-Grid/",
+    "image": "https://haytokoraz.github.io/Power-Grid/logo.png",
+    "screenshot": "https://haytokoraz.github.io/Power-Grid/screenshots/main_window.png",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "HaYTo",
+      "url": "https://github.com/HaYToKoRaZ"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "HaYTooL",
+      "url": "https://haytokoraz.github.io/"
+    }
+  }
+  </script>
+
+  <!-- Non-Blocking Google Fonts (Eliminates Render-Blocking - 2520ms Savings) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  </noscript>
+
+  <style>
+    /* Critical Above-The-Fold CSS - Power Grid HaYTooL */
+    :root {
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Outfit', var(--font-sans);
+      --font-mono: 'JetBrains Mono', Consolas, monospace;
+      --bg-page: #080C14;
+      --bg-surface: #0E1424;
+      --bg-surface-elevated: #151D33;
+      --bg-card: rgba(18, 25, 45, 0.75);
+      --bg-card-hover: rgba(26, 36, 65, 0.9);
+      --bg-glass: rgba(14, 20, 36, 0.7);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --border-focus: #3B82F6;
+      --text-primary: #F8FAFC;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --text-invert: #080C14;
+      --primary: #3B82F6;
+      --primary-hover: #2563EB;
+      --primary-glow: rgba(59, 130, 246, 0.35);
+      --accent-cyan: #06B6D4;
+      --accent-green: #10B981;
+      --accent-green-glow: rgba(16, 185, 129, 0.3);
+      --accent-amber: #F59E0B;
+      --accent-amber-glow: rgba(245, 158, 11, 0.3);
+      --accent-red: #EF4444;
+      --accent-purple: #8B5CF6;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.45);
+      --shadow-glow: 0 0 35px var(--primary-glow);
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.25s ease;
+      --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-theme="light"] {
+      --bg-page: #F8FAFC;
+      --bg-surface: #FFFFFF;
+      --bg-surface-elevated: #F1F5F9;
+      --bg-card: rgba(255, 255, 255, 0.85);
+      --bg-card-hover: rgba(248, 250, 252, 1);
+      --bg-glass: rgba(255, 255, 255, 0.8);
+      --border-subtle: rgba(15, 23, 42, 0.08);
+      --border-strong: rgba(15, 23, 42, 0.15);
+      --border-focus: #2563EB;
+      --text-primary: #0F172A;
+      --text-secondary: #334155;
+      --text-muted: #475569;
+      --text-invert: #FFFFFF;
+      --primary: #2563EB;
+      --primary-hover: #1D4ED8;
+      --primary-glow: rgba(37, 99, 235, 0.2);
+      --accent-cyan: #0284C7;
+      --accent-green: #059669;
+      --accent-green-glow: rgba(5, 150, 105, 0.2);
+      --accent-amber: #D97706;
+      --accent-amber-glow: rgba(217, 119, 6, 0.2);
+      --accent-red: #DC2626;
+      --accent-purple: #7C3AED;
+      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 20px 48px rgba(15, 23, 42, 0.12);
+      --shadow-glow: 0 0 35px var(--primary-glow);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+    p { color: var(--text-secondary); }
+    a { color: var(--primary); text-decoration: none; transition: color var(--transition-fast); }
+    a:hover { color: var(--primary-hover); }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg-glass); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--border-subtle); }
+    .nav-wrap { display: flex; align-items: center; justify-content: space-between; height: 74px; }
+    .nav-brand { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; color: var(--text-primary); }
+    .nav-brand img { width: 42px; height: 42px; border-radius: 10px; object-fit: contain; }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-link { font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); }
+    .nav-link:hover { color: var(--text-primary); }
+    .nav-link.nav-portal-link { color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); padding: 5px 12px; border-radius: var(--radius-full); font-weight: 600; font-size: 0.85rem; }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .btn-control { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.875rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, #1D4ED8 100%); color: #FFFFFF; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px var(--primary-glow); }
+    .btn-secondary { background: var(--bg-surface-elevated); color: var(--text-primary); border: 1px solid var(--border-strong); padding: 10px 20px; border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+    .hero-section { padding: 80px 0 60px; text-align: center; position: relative; }
+    .hero-pill-link { display: inline-block; text-decoration: none; }
+    .hero-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: var(--bg-surface-elevated); border: 1px solid var(--border-strong); border-radius: var(--radius-full); font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-bottom: 24px; }
+    .hero-pill .pulse-dot { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 10px var(--accent-green); }
+    .hero-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 20px; max-width: 900px; margin-left: auto; margin-right: auto; }
+    .hero-title .gradient-text { background: linear-gradient(135deg, var(--text-primary) 30%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-desc { font-size: 1.15rem; max-width: 680px; margin: 0 auto 36px; color: var(--text-secondary); }
+    .hero-cta-group { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 48px; }
+    .hero-trust-badges { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .trust-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-full); font-size: 0.82rem; color: var(--text-secondary); }
+    .mascot-wrapper { margin: 16px auto 0; display: flex; justify-content: center; }
+    .mascot-card { display: inline-flex; align-items: center; gap: 28px; background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 20px 32px; box-shadow: var(--shadow-lg); max-width: 680px; text-align: left; }
+    .mascot-img { width: 230px; height: 230px; border-radius: var(--radius-md); object-fit: cover; flex-shrink: 0; }
+    .mascot-speech { display: flex; flex-direction: column; gap: 8px; }
+    .mascot-badge { font-size: 0.85rem; font-weight: 700; color: var(--accent-amber); text-transform: uppercase; letter-spacing: 0.05em; }
+    .mascot-quote { font-size: 1.05rem; font-style: italic; color: var(--text-primary); line-height: 1.4; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hide-mobile { display: none; }
+      .mascot-card { flex-direction: column; text-align: center; gap: 16px; padding: 24px; }
+    }
+  </style>
+
+  <!-- Preload & Asynchronous Non-Blocking Stylesheet -->
+  <link rel="preload" href="style.css?v=1.3" as="style">
+  <link rel="stylesheet" href="style.css?v=1.3" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="style.css?v=1.3"></noscript>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="#" class="nav-brand">
+        <picture>
+          <source srcset="logo-42.webp 1x, logo-84.webp 2x" type="image/webp">
+          <img src="logo.png" alt="Power Grid Logo" width="42" height="42">
+        </picture>
+        <span>Power Grid</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#simulator" class="nav-link" data-i18n="nav_simulator">GPU Simülatörü</a></li>
+          <li><a href="#features" class="nav-link" data-i18n="nav_features">Özellikler</a></li>
+          <li><a href="#gallery" class="nav-link" data-i18n="nav_gallery">Ekran Görüntüleri</a></li>
+          <li><a href="#faq" class="nav-link" data-i18n="nav_faq">SSS</a></li>
+          <li><a href="https://haytokoraz.github.io/" target="_blank" rel="noopener noreferrer nofollow" class="nav-link nav-portal-link" data-i18n="nav_portal">🏛️ HaYTooL Portal</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="lang-toggle-btn" class="btn-control" title="Dili Değiştir / Switch Language">
+          <svg class="flag-icon" viewBox="0 0 60 30" width="18" height="12" style="border-radius:2px; vertical-align:middle; display:inline-block; margin-right:6px;"><clipPath id="s_nav"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t_nav"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s_nav)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t_nav)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+          English
+        </button>
+        <!-- Theme Switcher -->
+        <button id="theme-toggle-btn" class="btn-control" title="Temayı Değiştir / Toggle Theme">
+          ☀️ <span class="hide-mobile">Aydınlık</span>
+        </button>
+        <!-- Download CTA -->
+        <a href="#download" class="btn-primary" data-i18n="btn_download_nav">İndir</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <a href="https://haytokoraz.github.io/" target="_blank" rel="noopener noreferrer nofollow" class="hero-pill-link" title="HaYTooL Portalını Ziyaret Edin">
+          <div class="hero-pill">
+            <span class="pulse-dot"></span>
+            <span data-i18n="hero_pill">🏛️ HaYTooL Portalının Resmi Güç Yöneticisi</span>
+          </div>
+        </a>
+
+        <h1 class="hero-title" data-i18n="hero_title">
+          Bilgisayarınızın Gücünü <span class="gradient-text">Yapay Zeka Gibi Akıllı</span> Yönetin
+        </h1>
+
+        <p class="hero-desc" data-i18n="hero_desc">
+          Ekran kartı yükünüze göre güç planlarını otomatik değiştiren, boşta watt tasarrufu yapıp işlemci termallerini düşüren, oyunda ise mikro takılmaları (micro-stuttering) ve gecikmeyi önleyerek kararlı maksimum FPS sunan modern Windows güç yöneticisi.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="https://github.com/HaYToKoRaZ/Power-Grid/releases/latest" target="_blank" rel="noopener noreferrer nofollow" class="btn-primary" data-i18n="btn_download_portable">
+            ⚡ Taşınabilir İndir (.exe - Kurulumsuz)
+          </a>
+          <a href="https://github.com/HaYToKoRaZ/Power-Grid/releases/latest" target="_blank" rel="noopener noreferrer nofollow" class="btn-secondary" data-i18n="btn_download_setup">
+            📦 Otomatik Kurulum (.exe)
+          </a>
+          <a href="https://github.com/HaYToKoRaZ/Power-Grid" target="_blank" rel="noopener noreferrer nofollow" class="btn-secondary" data-i18n="btn_github_repo">
+            ⭐ GitHub'da İncele
+          </a>
+        </div>
+
+        <div class="hero-trust-badges">
+          <span class="trust-badge">🛡️ <strong data-i18n="trust_portable">%100 Taşınabilir</strong> (<span data-i18n="trust_no_install">Kurulumsuz</span>)</span>
+          <span class="trust-badge">⚡ <strong data-i18n="trust_latency">Düşük Gecikme (Low Latency)</strong></span>
+          <span class="trust-badge">🌱 <strong data-i18n="trust_watt">Düşük Watt Tüketimi</strong></span>
+          <span class="trust-badge">🔒 <strong data-i18n="trust_privacy">Sıfır Telemetri & Açık Kaynak</strong></span>
+        </div>
+
+        <!-- Power Cat Mascot -->
+        <div class="mascot-wrapper">
+          <div class="mascot-card">
+            <picture>
+              <source srcset="mascot-230.webp 1x, mascot.webp 2x" type="image/webp">
+              <source srcset="mascot-230.png 1x, mascot.png 2x" type="image/png">
+              <img src="mascot-230.png" alt="Power Cat Mascot" class="mascot-img" width="230" height="230" fetchpriority="high">
+            </picture>
+            <div class="mascot-speech">
+              <span class="mascot-badge" data-i18n="mascot_name">⚡ Power Cat (Güç Kedisi)</span>
+              <p class="mascot-quote" data-i18n="mascot_quote">"Masaüstünde fısıltı kadar sessiz, oyunda şimşek kadar hızlıyım! 🐾⚡"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Smart GPU Simulation Widget -->
+    <section id="simulator" class="section smart-gpu-showcase">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag" data-i18n="sim_tag">CANLI ETKİLEŞİMLİ DENEYİM</span>
+          <h2 class="section-title" data-i18n="sim_title">Akıllı GPU Otomatik Güç Anahtarını Test Edin</h2>
+          <p class="section-subtitle" data-i18n="sim_desc">
+            Aşağıdaki kaydırıcıyı hareket ettirerek ekran kartı yükünü simüle edin ve Power Grid HaYTooL'un sistemi nasıl tam zamanında yönettiğini canlı görün.
+          </p>
+        </div>
+
+        <div class="widget-card">
+          <div class="widget-header">
+            <div class="widget-title-group">
+              <h3 data-i18n="sim_active_plan_label">Aktif Güç Planı:</h3>
+              <p class="text-muted" data-i18n="sim_active_plan_sub">GPU Kullanım Eşiğine Göre Dinamik Olarak Belirlenir</p>
+            </div>
+            <div id="sim-active-plan" class="active-plan-badge badge-eco">
+              🌱 HaYTooL Eco Stealth (%0 - %10)
+            </div>
+          </div>
+
+          <!-- Slider Area -->
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span><strong data-i18n="sim_gpu_load">GPU Kullanım Yükü:</strong> <span id="sim-load-val" class="load-value">0%</span></span>
+              <span class="stage-tag" data-i18n="stage_idle">0% - 100% Simülasyon</span>
+            </div>
+            <input type="range" id="gpu-slider" class="gpu-slider" min="0" max="100" value="0" aria-label="GPU Load Simulator">
+          </div>
+
+          <!-- Dynamic Metrics Grid -->
+          <div class="sim-metrics-grid">
+            <div class="metric-box">
+              <div class="metric-label" data-i18n="metric_cpu_clock">İşlemci Frekansı</div>
+              <div id="sim-cpu-val" class="metric-value">1.2 - 2.4 GHz (Low Voltage)</div>
+              <div class="metric-sub" data-i18n="metric_sub_cpu">Düşük voltaj ve soğuk çekirdekler</div>
+            </div>
+
+            <div class="metric-box">
+              <div class="metric-label" data-i18n="metric_fan_noise">Fan Hızı / Termaller</div>
+              <div id="sim-fan-val" class="metric-value">0 RPM (Sessiz Whisper)</div>
+              <div class="metric-sub" data-i18n="metric_sub_fan">Tamamen sessiz masaüstü deneyimi</div>
+            </div>
+
+            <div class="metric-box">
+              <div class="metric-label" data-i18n="metric_power_draw">Tahmini Güç Tüketimi</div>
+              <div id="sim-watt-val" class="metric-value">~18 - 25 Watt</div>
+              <div class="metric-sub" data-i18n="metric_sub_watt">Boşta %40'a varan watt tasarrufu</div>
+            </div>
+
+            <div class="metric-box">
+              <div class="metric-label" data-i18n="metric_status">Sistem Durumu & Kararlılık</div>
+              <div id="sim-status-val" class="metric-value">Masaüstü Boşta / Enerji Tasarrufu</div>
+              <div class="metric-sub" data-i18n="metric_sub_status">0ms gecikme ve sıfır mikro takılma</div>
+            </div>
+          </div>
+
+          <!-- Real World Benchmark Cards -->
+          <div class="scenario-highlights">
+            <div class="scenario-item">
+              <div class="scenario-badge badge-idle">🌱 <span data-i18n="scen_idle_tag">Masaüstü & Medya</span></div>
+              <p data-i18n="scen_idle_text">Gereksiz saat hızları engellenir, boşta <strong>%40'a varan watt tasarrufu</strong> sağlanır ve fanlar tamamen sessizleşir.</p>
+            </div>
+            <div class="scenario-item">
+              <div class="scenario-badge badge-work">⚖️ <span data-i18n="scen_work_tag">Kodlama & Ofis</span></div>
+              <p data-i18n="scen_work_text">Sistem tepkiselliği anında dengelenir, ısı birikimi önlenir ve dengeli güç tüketimiyle akıcı çalışma ortamı sunulur.</p>
+            </div>
+            <div class="scenario-item">
+              <div class="scenario-badge badge-game">🚀 <span data-i18n="scen_game_tag">Ağır Oyun & Render</span></div>
+              <p data-i18n="scen_game_text">GPU %30'u aştığı milisaniyede yüksek performans devreye girer; çekirdek park etme çözülür, <strong>mikro takılmalar (micro-stuttering) ve gecikme sıfırlanır</strong>.</p>
+            </div>
+          </div>
+
+          <!-- Live Simulated Toast Notification -->
+          <div id="sim-toast" class="sim-toast">
+            <div id="sim-toast-icon" class="sim-toast-icon">🌱</div>
+            <div class="sim-toast-text">
+              <div class="sim-toast-title" data-i18n="toast_switched_title">🎮 Akıllı Güç Anahtarı</div>
+              <div id="sim-toast-desc" class="sim-toast-desc">Plana geçildi!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Bento Grid -->
+    <section id="features" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag" data-i18n="features_tag">GELİŞMİŞ DONANIM YÖNETİMİ</span>
+          <h2 class="section-title" data-i18n="features_title">Performans, Tasarruf ve Tam Kontrol</h2>
+          <p class="section-subtitle" data-i18n="features_subtitle">
+            Karmaşık Windows Denetim Masası adımlarını unutun. İhtiyacınız olan her şey parmaklarınızın ucunda.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Feature 1 -->
+          <div class="feature-card highlight">
+            <div class="feature-icon-box">🎮</div>
+            <h3 data-i18n="feat_gpu_title">Akıllı GPU Yük İzleme</h3>
+            <p data-i18n="feat_gpu_desc">
+              3 kademeli eşik sistemi (0-10% Boşta, 10-30% Günlük, 30-100% Oyun) ile güç planları arasında anında geçiş yaparak sıfır gecikme ve maksimum enerji tasarrufu sağlar.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">⚖️</div>
+            <h3 data-i18n="feat_compare_title">Yan Yana Plan Karşılaştırıcı</h3>
+            <p data-i18n="feat_compare_desc">
+              Sisteminizdeki herhangi iki güç planının işlemci sınırlarını, Turbo Boost durumlarını, soğutma ilkelerini ve uyku sürelerini satır satır görselleştirin.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">🛠️</div>
+            <h3 data-i18n="feat_editor_title">Derin Plan Düzenleyici</h3>
+            <p data-i18n="feat_editor_desc">
+              GUID kodları veya karmaşık komut istemleriyle uğraşmadan minimum/maksimum CPU durumlarını, fan politikasını ve zaman aşımlarını tek ekrandan ayarlayın.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">📦</div>
+            <h3 data-i18n="feat_backup_title">Otomatik ZIP Yedekleme</h3>
+            <p data-i18n="feat_backup_desc">
+              Herhangi bir değişiklik öncesinde tüm güç planlarınız tarih ve saat damgalı ZIP olarak yedeklenir. İstediğiniz an tek tıkla eski haline dönebilirsiniz.
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">🔔</div>
+            <h3 data-i18n="feat_toast_title">Zarif Toast Bildirimleri</h3>
+            <p data-i18n="feat_toast_desc">
+              Plan ister elinizle ister otomatik değişsin; saatin hemen yanında beliren göz yormayan, estetik bildirim kartıyla sistem durumundan anında haberdar olun.
+            </p>
+          </div>
+
+          <!-- Feature 7 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">🖱️</div>
+            <h3 data-i18n="feat_context_title">Masaüstü Sağ Tık Entegrasyonu</h3>
+            <p data-i18n="feat_context_desc">
+              Yönetici izni (UAC) pencereleriyle uğraşmadan, masaüstü sağ tık menüsüne tek tıkla güç planları menüsünü ekleyin veya kaldırın.
+            </p>
+          </div>
+
+          <!-- Feature 8 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">📌</div>
+            <h3 data-i18n="feat_startup_title">Kullanıcıya Özel Açılış Planı</h3>
+            <p data-i18n="feat_startup_desc">
+              Windows oturumunuz her açıldığında doğrudan istediğiniz özel güç profilinin aktif olmasını sağlayın.
+            </p>
+          </div>
+
+          <!-- Feature 9 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">🔓</div>
+            <h3 data-i18n="feat_unlock_title">Gizli Güç Ayarlarını Açma</h3>
+            <p data-i18n="feat_unlock_desc">
+              Denetim Masasındaki kilitli çekirdek park etme (core parking), agresif Turbo Boost ve PCIe ASPM güç ayarlarının kilidini tek tıkla açın.
+            </p>
+          </div>
+
+          <!-- Feature 10 -->
+          <div class="feature-card highlight">
+            <div class="feature-icon-box">💻</div>
+            <h3 data-i18n="feat_cli_title">Kapsamlı Komut Satırı (CLI)</h3>
+            <p data-i18n="feat_cli_desc">
+              Oyun başlatıcıları, Stream Deck veya betikleriniz için tam otomasyon: <code>-smart on/off</code> ile GPU anahtarını yönetin, planları listeleyin veya GUID ile anında geçiş yapın.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Screenshot Gallery -->
+    <section id="gallery" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag" data-i18n="gallery_tag">KULLANICI ARAYÜZÜ</span>
+          <h2 class="section-title" data-i18n="gallery_title">Sade, Şık ve Modern Tasarım</h2>
+          <p class="section-subtitle" data-i18n="gallery_subtitle">
+            Windows 11 tasarım diliyle kusursuz uyum sağlayan akıcı WPF arayüzü.
+          </p>
+        </div>
+
+        <div class="gallery-container">
+          <div class="gallery-tabs">
+            <button class="gallery-tab active" data-tab="main" data-i18n="tab_main">Ana Pencere</button>
+            <button class="gallery-tab" data-tab="gpu" data-i18n="tab_gpu">Akıllı GPU Anahtarı</button>
+            <button class="gallery-tab" data-tab="compare" data-i18n="tab_compare">Plan Karşılaştırıcı</button>
+          </div>
+
+          <div class="gallery-view">
+            <picture id="gallery-picture">
+              <source id="gallery-source-webp" srcset="screenshots/main_window.webp" type="image/webp">
+              <img id="gallery-display-img" src="screenshots/main_window.png" alt="Ekran Görüntüsü" width="416" height="650" loading="lazy">
+            </picture>
+            <div id="gallery-caption-text" class="gallery-caption" data-i18n="caption_main">
+              Tüm güç planlarının dinamik kartlar halinde listelendiği, tek tıkla geçiş sağlayan ana arayüz.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag" data-i18n="compare_tag">NEDEN POWER GRID?</span>
+          <h2 class="section-title" data-i18n="compare_title">Windows Denetim Masası vs. Power Grid HaYTooL</h2>
+        </div>
+
+        <div class="compare-table-wrapper">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th data-i18n="th_feature">Özellik</th>
+                <th data-i18n="th_standard">Klasik Windows Güç Seçenekleri</th>
+                <th data-i18n="th_haytool">⚡ Power Grid HaYTooL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong data-i18n="row1_title">GPU Yüküne Göre Otomatik Geçiş</strong></td>
+                <td data-i18n="row1_std">❌ Yok (Plan sabit kalır)</td>
+                <td><strong data-i18n="row1_hay">✅ Var (3 Kademeli Akıllı Otomasyon)</strong></td>
+              </tr>
+              <tr>
+                <td><strong data-i18n="row2_title">Planları Yan Yana Karşılaştırma</strong></td>
+                <td data-i18n="row2_std">❌ Yok</td>
+                <td><strong data-i18n="row2_hay">✅ Görsel Yan Yana Karşılaştırıcı</strong></td>
+              </tr>
+              <tr>
+                <td><strong data-i18n="row3_title">Masaüstü Sağ Tık Menüsü</strong></td>
+                <td data-i18n="row3_std">❌ Yok</td>
+                <td><strong data-i18n="row3_hay">✅ Tek Tıkla Entegrasyon (HKCU)</strong></td>
+              </tr>
+              <tr>
+                <td><strong data-i18n="row4_title">Otomatik ZIP Yedekleme</strong></td>
+                <td data-i18n="row4_std">❌ Yok</td>
+                <td><strong data-i18n="row4_hay">✅ Her Değişiklikte Tarihli ZIP</strong></td>
+              </tr>
+              <tr>
+                <td><strong data-i18n="row5_title">Gizli Güç Ayarları Kilit Çözücü</strong></td>
+                <td data-i18n="row5_std">❌ Komut istemi / Kayıt Defteri bilgisi gerekir</td>
+                <td><strong data-i18n="row5_hay">✅ Tek Tıkla Tüm Kilitleri Açma</strong></td>
+              </tr>
+              <tr>
+                <td><strong data-i18n="row6_title">Görsel Tema Seçenekleri</strong></td>
+                <td data-i18n="row6_std">❌ Yok</td>
+                <td><strong data-i18n="row6_hay">✅ 14 Özel Açık & Koyu Palet</strong></td>
+              </tr>
+              <tr>
+                <td><strong data-i18n="row7_title">Kurulum İhtiyacı</strong></td>
+                <td data-i18n="row7_std">İşletim sistemi bileşeni</td>
+                <td><strong data-i18n="row7_hay">✅ %100 Taşınabilir Tek .EXE</strong></td>
+              </tr>
+              <tr>
+                <td><strong data-i18n="row8_title">Komut Satırı (CLI) & Otomasyon</strong></td>
+                <td data-i18n="row8_std">⚠️ Yalnızca karmaşık powercfg parametreleri</td>
+                <td><strong data-i18n="row8_hay">✅ Tam Otomasyon (Akıllı anahtar, tepsi ve plan geçişi)</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Developer Manifesto & E-E-A-T Engineering Trust -->
+    <section class="section manifesto-section">
+      <div class="container">
+        <div class="manifesto-card">
+          <div class="manifesto-header">
+            <span class="section-tag" data-i18n="manifesto_tag">GELİŞTİRİCİ MANİFESTOSU & GÜVEN</span>
+            <h2 class="section-title" data-i18n="manifesto_title">Neden Power Grid HaYTooL?</h2>
+            <p class="section-subtitle" data-i18n="manifesto_subtitle">
+              Piyasadaki arka planda gizli servisler çalıştıran, telemetri toplayan ve sistemi yoran hantal araçlara tepki olarak doğdu.
+            </p>
+          </div>
+
+          <div class="manifesto-grid">
+            <div class="manifesto-item">
+              <div class="manifesto-icon">🛡️</div>
+              <h3 data-i18n="man_item1_title">%100 Temiz & Sıfır Telemetri</h3>
+              <p data-i18n="man_item1_desc">Arka planda çalışan casus Windows servisleri, otomatik veri toplayıcılar veya reklam motorları kesinlikle barındırmaz. Kodlarımız GitHub üzerinde tamamen açıktır.</p>
+            </div>
+
+            <div class="manifesto-item">
+              <div class="manifesto-icon">⚙️</div>
+              <h3 data-i18n="man_item2_title">Yerel Windows Win32 / Kernel API</h3>
+              <p data-i18n="man_item2_desc">Sisteminize yabancı veya tehlikeli üçüncü parti sürücüler yüklemez; doğrudan Windows'un yerel <code>Powrprof.dll</code> güç mimarisini yönetir.</p>
+            </div>
+
+            <div class="manifesto-item">
+              <div class="manifesto-icon">🎮</div>
+              <h3 data-i18n="man_item3_title">Düşük Gecikme & Kararlılık Garantisi</h3>
+              <p data-i18n="man_item3_desc">Oyun sırasında işlemci çekirdeklerini uyanık tutarak mikro takılmaları (micro-stuttering) ve FPS dalgalanmalarını sıfırlar; masaüstünde ise watt tüketimini minimize eder.</p>
+            </div>
+          </div>
+
+          <div class="manifesto-footer">
+            <span class="manifesto-author" data-i18n="manifesto_signature">👨‍💻 HaYTooL Portal Açık Kaynak Geliştirici Topluluğu</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag" data-i18n="faq_tag">MERAK EDİLENLER</span>
+          <h2 class="section-title" data-i18n="faq_title">Sıkça Sorulan Sorular</h2>
+        </div>
+
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h3 data-i18n="faq_q1">Power Grid HaYTooL kurulum gerektirir mi?</h3>
+            <p data-i18n="faq_a1">
+              Hayır! Uygulama tamamen tek dosya taşınabilir (.exe) olarak çalışır. Kurulum yapmadan USB belleğinizden veya doğrudan istediğiniz klasörden çalıştırabilirsiniz.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3 data-i18n="faq_q2">Akıllı GPU Anahtarı nasıl enerji tasarrufu sağlar?</h3>
+            <p data-i18n="faq_a2">
+              Oyun oynamadığınızda veya masaüstünde video izlerken bilgisayarınızı otomatik olarak Eco Stealth veya Dengeli plana geçirir. Bu sayede işlemci gereksiz yere yüksek frekansta çalışmaz, fanlar susar ve elektrik tasarrufu sağlanır.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3 data-i18n="faq_q5">Oyunlarda mikro takılmaları (micro-stuttering) ve gecikmeyi önler mi?</h3>
+            <p data-i18n="faq_a5">
+              Evet! Standart Windows planları oyun ortasında işlemci çekirdeklerini gereksiz yere park edip frekans düşürebilir. Power Grid, GPU yükü algılandığında Apex moduna geçerek tüm çekirdekleri uyanık tutar ve ani FPS düşüşlerini önler.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3 data-i18n="faq_q6">İşlemci sıcaklıklarını ve termal kısılmayı (thermal throttling) nasıl etkiler?</h3>
+            <p data-i18n="faq_a6">
+              Masaüstü ve hafif kullanımda voltajı ve gereksiz Turbo Boost sıçramalarını dizginleyerek donanımın serin kalmasını sağlar. Isı birikimi önlendiği için oyun açıldığında sistem termal sınıra çarpmadan maksimum saat hızında çalışır.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3 data-i18n="faq_q3">Yönetici (Admin) izni gerektirir mi?</h3>
+            <p data-i18n="faq_a3">
+              Temel güç planı değişimleri ve masaüstü sağ tık entegrasyonu standart kullanıcı (HKCU) yetkisiyle yönetici izni gerekmeden çalışır. Sadece fabrika ayarlarına sıfırlama gibi derin sistem ayarlarında yetki talep edilir.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3 data-i18n="faq_q4">Bozulursa eski planlarımı geri getirebilir miyim?</h3>
+            <p data-i18n="faq_a4">
+              Evet! Uygulama her değişiklikte otomatik ZIP yedeği alır. 'Otomatik ZIP Yedeğinden Geri Yükle' veya 'Varsayılanlara Sıfırla' menüleriyle anında eski orijinal planlarınıza dönebilirsiniz.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3 data-i18n="faq_q7">Komut satırından (CLI / CMD) yönetilebilir mi?</h3>
+            <p data-i18n="faq_a7">
+              Evet! PowerGridHaYTooL.exe -smart on/off, -list, -apply {GUID} ve -exit gibi komutlarla başlatıcılarınıza, bat betiklerinize veya Stream Deck tuşlarınıza bağlayabilirsiniz.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download CTA Section -->
+    <section id="download" class="download-section">
+      <div class="container">
+        <div class="download-card">
+          <span class="section-tag" data-i18n="download_tag">HEMEN DENEYİN</span>
+          <h2 class="section-title" data-i18n="download_title">Bilgisayarınızın Kontrolünü Eline Alın</h2>
+          <p class="section-subtitle" data-i18n="download_desc">
+            Power Grid HaYTooL tamamen ücretsiz ve açık kaynaklıdır. Hemen indirin, sessizliğin ve performansın tadını çıkarın.
+          </p>
+
+          <div class="download-actions">
+            <a href="https://github.com/HaYToKoRaZ/Power-Grid/releases/latest" target="_blank" rel="noopener noreferrer nofollow" class="btn-primary" data-i18n="btn_download_portable">
+              ⚡ Taşınabilir İndir (.exe)
+            </a>
+            <a href="https://github.com/HaYToKoRaZ/Power-Grid/releases/latest" target="_blank" rel="noopener noreferrer nofollow" class="btn-secondary" data-i18n="btn_download_setup">
+              📦 Otomatik Kurulum (.exe)
+            </a>
+          </div>
+
+          <div class="system-reqs" data-i18n="download_reqs">
+            Gereksinimler: Windows 10 / 11 (64-bit) • .NET 10.0 WPF • Tek dosya portable
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <div class="footer-brand">
+        <strong>Power Grid HaYTooL</strong> — <span data-i18n="footer_rights">Power Grid HaYTooL, HaYTooL Portalının resmi açık kaynak projesidir.</span>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://github.com/HaYToKoRaZ/Power-Grid" target="_blank" rel="noopener noreferrer nofollow">GitHub</a>
+        <a href="https://haytokoraz.github.io/" target="_blank" rel="noopener noreferrer nofollow">HaYTooL Portal</a>
+        <a href="mailto:korazhayto@gmail.com" data-i18n="footer_contact">İletişim</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox-modal" class="lightbox-modal">
+    <button id="lightbox-close-btn" class="lightbox-close">&times;</button>
+    <img id="lightbox-img" class="lightbox-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3C/svg%3E" alt="Büyütülmüş Ekran Görüntüsü" width="800" height="600" loading="lazy">
+  </div>
+
+  <!-- Interactive JavaScript Controller -->
+  <script src="app.js?v=1.0" defer></script>
+</body>
+</html>
