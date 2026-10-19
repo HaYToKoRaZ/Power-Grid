@@ -1,0 +1,100 @@
+name: Build & Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build, Package & Publish Release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract Version
+        id: get_version
+        shell: pwsh
+        run: |
+          $csproj = [xml](Get-Content -Path "PowerGridHaYTooL.csproj")
+          $ver = $csproj.Project.PropertyGroup.Version
+          if (-not $ver) { $ver = "1.0" }
+          Write-Host "Detected Version: $ver"
+          "APP_VERSION=$ver" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: 'preview'
+
+      - name: Setup Inno Setup Compiler
+        shell: pwsh
+        run: |
+          choco install innosetup --no-progress
+          $isccPath = "C:\Program Files (x86)\Inno Setup 6"
+          if (Test-Path $isccPath) {
+            "$isccPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          }
+
+      - name: Build & Publish Single-File Executable
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path "./Publish" -Force | Out-Null
+          dotnet publish PowerGridHaYTooL.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o ./Publish --nologo
+          Copy-Item -Path "PowerGridHaYTooL.ini" -Destination "./Publish/PowerGridHaYTooL.ini" -Force
+          Get-ChildItem -Path "./Publish" -Filter "*.pdb" | Remove-Item -Force -ErrorAction SilentlyContinue
+
+      - name: Create Portable Zip Package
+        shell: pwsh
+        run: |
+          $ver = $env:APP_VERSION
+          $zipName = "PowerGridHaYTooL_v${ver}_Portable.zip"
+          $zipPath = "./Publish/$zipName"
+          Write-Host "Packaging Portable: $zipPath"
+          Compress-Archive -Path "./Publish/PowerGridHaYTooL.exe", "./Publish/PowerGridHaYTooL.ini", "logo.png", "app.ico" -DestinationPath $zipPath -Force
+
+      - name: Build Inno Setup Installer
+        shell: pwsh
+        run: |
+          $ver = $env:APP_VERSION
+          Write-Host "Building Setup for v$ver..."
+          iscc /DMyAppVersion="$ver" /DMySourceDir="./Publish" /DMyOutputDir="./Publish" installer.iss
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.APP_VERSION }}
+          name: Power Grid HaYTooL v${{ env.APP_VERSION }}
+          draft: false
+          prerelease: false
+          make_latest: true
+          generate_release_notes: true
+          body: |
+            ## ⚡ Power Grid HaYTooL v${{ env.APP_VERSION }}
+            
+            Windows Gelişmiş Güç Planları ve Performans Yönetim Aracı.
+            
+            ### 📦 İndirme Seçenekleri (Downloads)
+            - 🚀 **Kurulum Sürümü (Setup / Installer):** `PowerGridHaYTooL_v${{ env.APP_VERSION }}_Setup.exe`
+            - 💼 **Taşınabilir Sürüm (Portable .ZIP):** `PowerGridHaYTooL_v${{ env.APP_VERSION }}_Portable.zip`
+            
+            ---
+            🌐 **Tanıtım & Web Sitesi:** https://haytokoraz.github.io/Power-Grid/  
+            🏛️ **HaYTooL Portalı:** https://haytokoraz.github.io/  
+            📫 **Geri Bildirim / İletişim:** korazhayto@gmail.com
+          files: |
+            Publish/PowerGridHaYTooL_v${{ env.APP_VERSION }}_Setup.exe
+            Publish/PowerGridHaYTooL_v${{ env.APP_VERSION }}_Portable.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

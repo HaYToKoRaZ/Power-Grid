@@ -1,0 +1,627 @@
+<Window x:Class="PowerGridHaYTooL.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:tb="clr-namespace:H.NotifyIcon;assembly=H.NotifyIcon.Wpf"
+        Title="Power Grid HaYTooL" 
+        Width="430" Height="560"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource BrushWindowBg}" 
+        Foreground="{DynamicResource BrushTextPrimary}"
+        FontFamily="Segoe UI"
+        Icon="logo.png"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        StateChanged="Window_StateChanged"
+        KeyDown="Window_KeyDown">
+
+    <Window.Resources>
+        <!-- Dynamic Brushes -->
+        <SolidColorBrush x:Key="BrushWindowBg" Color="#12141A"/>
+        <SolidColorBrush x:Key="BrushTextPrimary" Color="#F8FAFC"/>
+        <SolidColorBrush x:Key="BrushTextSecondary" Color="#94A3B8"/>
+        <SolidColorBrush x:Key="BrushMenuBg" Color="#161922"/>
+        <SolidColorBrush x:Key="BrushMenuPopupBg" Color="#1A1E2A"/>
+        <SolidColorBrush x:Key="BrushMenuItemHover" Color="#283042"/>
+        <SolidColorBrush x:Key="BrushListBg" Color="#101218"/>
+        <SolidColorBrush x:Key="BrushListItemHover" Color="#1E2432"/>
+        <SolidColorBrush x:Key="BrushListItemSelected" Color="#263044"/>
+        <SolidColorBrush x:Key="BrushHeaderBg" Color="#181C26"/>
+        <SolidColorBrush x:Key="BrushHeaderBorder" Color="#2A3041"/>
+        <SolidColorBrush x:Key="BrushCardBg" Color="#181C26"/>
+        <SolidColorBrush x:Key="BrushBorder" Color="#2A3041"/>
+        <SolidColorBrush x:Key="BrushStatusBg" Color="#161922"/>
+        <SolidColorBrush x:Key="BrushBtnBg" Color="#1C212E"/>
+        <SolidColorBrush x:Key="BrushBtnBorder" Color="#2D364B"/>
+        <SolidColorBrush x:Key="BrushBtnHover" Color="#2A344A"/>
+        <SolidColorBrush x:Key="BrushAccent" Color="#00F2FE"/>
+        <SolidColorBrush x:Key="BrushAccentGlow" Color="#2800F2FE"/>
+
+        <!-- ContextMenu Style -->
+        <Style TargetType="{x:Type ContextMenu}">
+            <Setter Property="Background" Value="{DynamicResource BrushMenuPopupBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrushBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Border Background="{DynamicResource BrushMenuPopupBg}" 
+                                BorderBrush="{DynamicResource BrushBorder}" 
+                                BorderThickness="1" 
+                                CornerRadius="6" 
+                                Padding="4">
+                            <StackPanel IsItemsHost="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Separator Style -->
+        <Style TargetType="{x:Type Separator}">
+            <Setter Property="Background" Value="{DynamicResource BrushBorder}"/>
+            <Setter Property="Margin" Value="4,3"/>
+            <Setter Property="Height" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Separator}">
+                        <Border Background="{DynamicResource BrushBorder}" Height="1" Margin="2,3"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ListViewItem Full-Width Clean Style -->
+        <Style TargetType="{x:Type ListViewItem}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                        <Border x:Name="Bd" 
+                                Background="Transparent" 
+                                BorderThickness="0" 
+                                Padding="0" 
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- MenuItem Themed Style -->
+        <Style TargetType="{x:Type MenuItem}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Style.Triggers>
+                <Trigger Property="Role" Value="TopLevelHeader">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                <Grid Background="Transparent">
+                                    <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="8,4" CornerRadius="4" Margin="1">
+                                        <ContentPresenter ContentSource="Header" RecognizesAccessKey="True" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <Popup x:Name="PART_Popup" 
+                                           AllowsTransparency="True" 
+                                           Focusable="False" 
+                                           IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" 
+                                           Placement="Bottom" 
+                                           VerticalOffset="-1"
+                                           PopupAnimation="None">
+                                        <Border Background="{DynamicResource BrushMenuPopupBg}" 
+                                                BorderBrush="{DynamicResource BrushBorder}" 
+                                                BorderThickness="1" 
+                                                CornerRadius="6" 
+                                                Padding="4" 
+                                                Margin="0">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                        </Border>
+                                    </Popup>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsHighlighted" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource BrushMenuItemHover}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSubmenuOpen" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource BrushMenuItemHover}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+
+                <Trigger Property="Role" Value="TopLevelItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="8,4" CornerRadius="4" Margin="1">
+                                    <ContentPresenter ContentSource="Header" RecognizesAccessKey="True" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsHighlighted" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource BrushMenuItemHover}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+
+                <Trigger Property="Role" Value="SubmenuItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="6,4" CornerRadius="4" Margin="2,1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="22"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ContentPresenter x:Name="Icon" ContentSource="Icon" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock x:Name="CheckMark" Text="✓" Foreground="{DynamicResource BrushAccent}" FontWeight="Bold" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" Margin="6,0,16,0" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" Text="{TemplateBinding InputGestureText}" Foreground="{DynamicResource BrushTextSecondary}" VerticalAlignment="Center" Margin="8,0,4,0"/>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                        <Setter TargetName="Icon" Property="Visibility" Value="Collapsed"/>
+                                    </Trigger>
+                                    <Trigger Property="IsHighlighted" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource BrushMenuItemHover}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Opacity" Value="0.4"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+
+                <Trigger Property="Role" Value="SubmenuHeader">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                <Grid Background="Transparent">
+                                    <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="6,4" CornerRadius="4" Margin="2,1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="22"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="16"/>
+                                            </Grid.ColumnDefinitions>
+                                            <ContentPresenter ContentSource="Icon" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" Margin="6,0,12,0" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="2" Text="▶" FontSize="9" Foreground="{DynamicResource BrushTextSecondary}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                    </Border>
+                                    <Popup x:Name="PART_Popup" 
+                                           AllowsTransparency="True" 
+                                           Focusable="False" 
+                                           IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" 
+                                           Placement="Right" 
+                                           HorizontalOffset="-4"
+                                           VerticalOffset="-2"
+                                           PopupAnimation="None">
+                                        <Border Background="{DynamicResource BrushMenuPopupBg}" 
+                                                BorderBrush="{DynamicResource BrushBorder}" 
+                                                BorderThickness="1" 
+                                                CornerRadius="6" 
+                                                Padding="4" 
+                                                Margin="0">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                        </Border>
+                                    </Popup>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsHighlighted" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource BrushMenuItemHover}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSubmenuOpen" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource BrushMenuItemHover}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Secondary Action Button Style -->
+        <Style TargetType="{x:Type Button}" x:Key="ActionBtnStyle">
+            <Setter Property="Background" Value="{DynamicResource BrushBtnBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrushBtnBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="bd" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="6" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource BrushBtnHover}"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource BrushAccent}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource BrushListItemSelected}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="{DynamicResource BrushWindowBg}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Menu Bar -->
+            <RowDefinition Height="*"/>    <!-- Full-Width Card Plans List -->
+            <RowDefinition Height="Auto"/> <!-- Bottom Actions & Status -->
+        </Grid.RowDefinitions>
+
+        <!-- System Tray Notification Icon -->
+        <tb:TaskbarIcon x:Name="MyNotifyIcon"
+                        ToolTipText="Power Grid HaYTooL"
+                        IconSource="pack://application:,,,/app.ico"
+                        Visibility="Collapsed"
+                        TrayMouseDoubleClick="MyNotifyIcon_TrayMouseDoubleClick">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu x:Name="TrayContextMenu" Opened="TrayContextMenu_Opened">
+                    <MenuItem x:Name="TrayShowItem" Header="Ana Pencereyi Göster" Click="BtnShow_Click" FontWeight="Bold"/>
+                    <Separator/>
+
+                    <!-- Güç Düzenleri Listesi (Doğrudan Ana Menüde - Alt Menü Yok, Anında Seçim) -->
+                    <MenuItem x:Name="TrayPlansHeader" Header="⚡ GÜÇ DÜZENLERİ" IsEnabled="False" FontWeight="Bold"/>
+                    <Separator x:Name="TrayPlansSeparator"/>
+
+                    <!-- Akıllı GPU Güç Anahtarı (Doğrudan Ana Menüde - Alt Menü Yok!) -->
+                    <MenuItem x:Name="TraySmartSwitchToggle" Header="⚡ Akıllı GPU Güç Anahtarı: Açık" Click="TraySmartSwitchToggle_Click" IsCheckable="True"/>
+                    <MenuItem x:Name="TraySmartSwitchStatus" Header="📊 Durum: Yükleniyor..." Click="BtnSmartAutoSwitch_Click" ToolTip="Akıllı GPU durumunu gör veya ayarları aç"/>
+                    <MenuItem x:Name="TraySmartSwitchSettings" Header="⚙️ Akıllı GPU Ayarları..." Click="BtnSmartAutoSwitch_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="TrayContextMenuItem" Header="Masaüstü Sağ Tuş Menüsüne Ekle" Click="BtnContextMenuToggle_Click"/>
+                    <MenuItem x:Name="TrayPowerCplItem" Header="Güç Seçenekleri" Click="BtnOpenPowerCpl_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="TrayCheckUpdateItem" Header="🔄 Güncellemeleri Denetle..." Click="BtnCheckUpdate_Click"/>
+                    <MenuItem x:Name="TrayCliHelpItem" Header="💻 Komut Satırı (CLI) Kılavuzu..." Click="BtnCliHelp_Click"/>
+                    <MenuItem x:Name="TrayAboutItem" Header="Hakkında &amp; Geri Bildirim..." Click="BtnAbout_Click"/>
+                    <MenuItem x:Name="TrayExitItem" Header="Kapat" Click="BtnExit_Click"/>
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+
+        <!-- 1. MenuBar -->
+        <Menu Grid.Row="0" Background="{DynamicResource BrushMenuBg}" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="0,0,0,1" Padding="2" Foreground="{DynamicResource BrushTextPrimary}">
+            <MenuItem x:Name="MnuFile" Header="Dosya">
+                <MenuItem x:Name="MnuApply" Header="Seçileni Uygula" Click="BtnApply_Click" InputGestureText="Enter">
+                    <MenuItem.Icon>
+                        <Image Source="menu_icon_0.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="MnuNewPlan" Header="Yeni Güç Düzeni Oluştur" Click="BtnNewPlan_Click">
+                    <MenuItem.Icon>
+                        <Image Source="menu_icon_1.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="MnuDelete" Header="Listeden Seçileni Sil" Click="BtnDelete_Click" InputGestureText="Del">
+                    <MenuItem.Icon>
+                        <Image Source="menu_icon_2.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem x:Name="MnuImport" Header="Dosyadan Güç Düzeni Al..." Click="BtnImport_Click"/>
+                <MenuItem x:Name="MnuExport" Header="Dışarıya Aktar..." Click="BtnExport_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuBackupAll" Header="Tüm Güç Düzenlerini Yedekle (Toplu)..." Click="BtnBackupAll_Click"/>
+                <MenuItem x:Name="MnuRestoreAutoZip" Header="📦 Otomatik ZIP Yedeğinden Geri Yükle..." Click="BtnRestoreAutoZip_Click"/>
+                <MenuItem x:Name="MnuRestoreAll" Header="Yedek Klasöründen Toplu İçe Aktar..." Click="BtnRestoreAll_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuExit" Header="Kapat" Click="BtnExit_Click"/>
+            </MenuItem>
+
+            <MenuItem x:Name="MnuEdit" Header="Düzen">
+                <MenuItem x:Name="MnuEditSettings" Header="Plan Ayarlarını Düzenle..." Click="BtnEditSettings_Click" InputGestureText="Ctrl+E"/>
+                <MenuItem x:Name="MnuToggleStartupPlan" Header="📌 Oturum Açılış Planı Olarak Ayarla" Click="BtnToggleStartupPlan_Click"/>
+                <MenuItem x:Name="MnuRename" Header="Yeniden Adlandır" Click="BtnRename_Click" InputGestureText="F2"/>
+                <MenuItem x:Name="MnuCreateShortcut" Header="Masaüstüne Kısayol Oluştur" Click="BtnCreateShortcut_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuCopy" Header="Kopyala">
+                    <MenuItem x:Name="MnuCopyGuid" Header="GUID" Click="BtnCopyGuid_Click"/>
+                    <MenuItem x:Name="MnuCopyName" Header="İsmi" Click="BtnCopyName_Click"/>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem x:Name="MnuTemplates" Header="Şablonlar">
+                <MenuItem x:Name="MnuAddAllCustom" Header="🚀 Tüm Özel Şablonları Ekle (HaYTooL &amp; AMD)" Click="BtnAddAllCustom_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuAddHaYTooLAll" Header="⚡ Özel Power Grid Profillerini Ekle (3 Profil)" Click="BtnAddHaYTooLAll_Click"/>
+                <MenuItem x:Name="MnuAddAmdAll" Header="🔴 AMD Ryzen™ Profillerini Ekle (2 Profil)" Click="BtnAddAmdAll_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuUltimatePerf" Header="⚡ Nihai Performans (Ultimate Performance) Ekle" Click="BtnAddUltimatePerf_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuIndividualTemplates" Header="🔍 Tek Tek Seçerek Ekle...">
+                    <MenuItem x:Name="MnuHaYTooLApex" Header="⚡ Power Grid Apex Performance Ekle" Click="BtnAddHaYTooLApex_Click"/>
+                    <MenuItem x:Name="MnuHaYTooLBalanced" Header="⚖️ Power Grid Smart Balanced Ekle" Click="BtnAddHaYTooLBalanced_Click"/>
+                    <MenuItem x:Name="MnuHaYTooLEco" Header="🌱 Power Grid Eco Stealth Ekle" Click="BtnAddHaYTooLEco_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="MnuAmdBalanced" Header="🔴 AMD Ryzen™ Dengeli Ekle" Click="BtnAddAmdBalanced_Click"/>
+                    <MenuItem x:Name="MnuAmdHighPerf" Header="🚀 AMD Ryzen™ Yüksek Performans Ekle" Click="BtnAddAmdHighPerf_Click"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem x:Name="MnuTemplatesRestoreZip" Header="📦 Otomatik ZIP Yedeğinden Geri Yükle..." Click="BtnRestoreAutoZip_Click"/>
+                <MenuItem x:Name="MnuRestore" Header="🔄 Windows Güç Düzenlerini Varsayılana Döndür" Click="BtnRestore_Click"/>
+            </MenuItem>
+
+            <MenuItem x:Name="MnuTools" Header="Araçlar">
+                <MenuItem x:Name="MnuSmartAutoSwitch" Header="🎮 Akıllı GPU ve Oyun Otomatik Güç Anahtarı..." Click="BtnSmartAutoSwitch_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuComparePlans" Header="⚖ Güç Düzenlerini Karşılaştır..." Click="BtnComparePlans_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuUnlockHidden" Header="🔓 Windows Gizli Güç Ayarlarını Aç (Tümünü Göster)" Click="BtnUnlockHidden_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuPowerCpl" Header="Güç Seçenekleri" Click="BtnOpenPowerCpl_Click"/>
+                <MenuItem x:Name="MnuMobility" Header="Windows Mobility Center" Click="BtnMobilityCenter_Click"/>
+                <MenuItem x:Name="MnuPowerSleep" Header="Güç ve Uyku Ayarları" Click="BtnPowerSleepSettings_Click"/>
+            </MenuItem>
+
+            <MenuItem x:Name="MnuOptions" Header="Seçenekler">
+                <MenuItem x:Name="MenuDesktopContext" Header="Masaüstü Sağ Tuş Menüsüne Ekle" Click="BtnContextMenuToggle_Click" IsCheckable="True"/>
+                <MenuItem x:Name="MenuShowSystemTray" Header="Sistem Tepsisinde Göster (System Tray)" Click="MenuShowSystemTray_Click" IsCheckable="True"/>
+                <MenuItem x:Name="MenuAlwaysOnTop" Header="Pencere Her Zaman Üstte" Click="MenuAlwaysOnTop_Click" IsCheckable="True"/>
+                <MenuItem x:Name="MenuHideMinimized" Header="Küçültüldüğünde Pencereyi Gizle" Click="MenuHideMinimized_Click" IsCheckable="True"/>
+                <MenuItem x:Name="MenuCloseToTray" Header="Kapatıldığında Sistem Tepsisine Küçült" Click="MenuCloseToTray_Click" IsCheckable="True"/>
+                <MenuItem x:Name="MenuAutoStart" Header="Oturum Başlangıcında Çalıştır" Click="MenuAutoStart_Click" IsCheckable="True"/>
+                <MenuItem x:Name="MnuUserStartupInfo" Header="👥 Kullanıcı Başlangıç Planları Yöneticisi..." Click="BtnUserStartupInfo_Click"/>
+                <Separator/>
+                <!-- Dil (Language) Seçenekleri - Bayraklı -->
+                <MenuItem x:Name="MnuLanguage" Header="Dil (Language)">
+                    <MenuItem x:Name="MnuLangAuto" Header="Windows Otomatik (Sistem)" Click="LangAuto_Click" IsCheckable="True"/>
+                    <Separator/>
+                    <MenuItem x:Name="MnuLangTurkish" Header="Türkçe" Click="LangTurkish_Click" IsCheckable="True">
+                        <MenuItem.Icon>
+                            <Image Source="flag_tr.png" Width="18" Height="14"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="MnuLangEnglish" Header="English" Click="LangEnglish_Click" IsCheckable="True">
+                        <MenuItem.Icon>
+                            <Image Source="flag_en.png" Width="18" Height="14"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <!-- Tema (Theme) Seçenekleri -->
+                <MenuItem x:Name="MnuTheme" Header="Tema (Theme)">
+                    <MenuItem x:Name="MnuThemeAuto" Header="Windows Otomatik (Sistem)" Click="ThemeAuto_Click" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeDark" Header="🌅 Gün Batımı (Varsayılan Koyu)" Click="ThemeDark_Click" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeLight" Header="🌿 Botanik Bahçesi (Varsayılan Açık)" Click="ThemeLight_Click" IsCheckable="True"/>
+                    <Separator/>
+                    <MenuItem x:Name="MnuThemeNordic" Header="🌌 Nordic Gece Mavisi" Click="ThemeCustom_Click" Tag="Nordic" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeObsidian" Header="⬛ Obsidyen Siyah" Click="ThemeObsidian_Click" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeSilverBlue" Header="☀️ Gümüş Mavi (Klasik Açık)" Click="ThemeCustom_Click" Tag="SilverBlue" IsCheckable="True"/>
+                    <Separator/>
+                    <MenuItem x:Name="MnuThemeOceanDepths" Header="🌊 Okyanus Derinliği (Ocean Depths)" Click="ThemeCustom_Click" Tag="OceanDepths" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeMidnightGalaxy" Header="✨ Gece Galaksisi (Midnight Galaxy)" Click="ThemeCustom_Click" Tag="MidnightGalaxy" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeTechInnovation" Header="⚡ Teknoloji &amp; Siber (Tech Innovation)" Click="ThemeCustom_Click" Tag="TechInnovation" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeForestCanopy" Header="🌲 Orman Yeşili (Forest Canopy)" Click="ThemeCustom_Click" Tag="ForestCanopy" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeArcticFrost" Header="❄️ Arktik Buzul (Arctic Frost)" Click="ThemeCustom_Click" Tag="ArcticFrost" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeDesertRose" Header="🌹 Çöl Gülü (Desert Rose)" Click="ThemeCustom_Click" Tag="DesertRose" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeGoldenHour" Header="🍁 Altın Saat (Golden Hour)" Click="ThemeCustom_Click" Tag="GoldenHour" IsCheckable="True"/>
+                    <MenuItem x:Name="MnuThemeModernMinimalist" Header="🏢 Modern Minimalist (Monochrome)" Click="ThemeCustom_Click" Tag="ModernMinimalist" IsCheckable="True"/>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem x:Name="MnuHelp" Header="Yardım">
+                <MenuItem x:Name="MnuCliHelp" Header="💻 Komut Satırı (CLI) Kılavuzu..." Click="BtnCliHelp_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuWebsite" Header="🌐 Power Grid Web Sitesi" Click="BtnWebSite_Click"/>
+                <MenuItem x:Name="MnuPortal" Header="🏛️ HaYTooL Portalı" Click="BtnPortal_Click"/>
+                <MenuItem x:Name="MnuGithub" Header="🐙 GitHub Reposu" Click="BtnGithub_Click"/>
+                <MenuItem x:Name="MnuFeedback" Header="💬 Geri Bildirim Gönder..." Click="BtnFeedback_Click"/>
+                <MenuItem x:Name="MnuCheckUpdate" Header="🔄 Güncellemeleri Denetle..." Click="BtnCheckUpdate_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MnuAbout" Header="ℹ️ Hakkında (About)..." Click="BtnAbout_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- 2. Plans List as Sleek Full-Width Cards -->
+        <ListView Grid.Row="1" x:Name="LstPlans" 
+                  Margin="12,8,12,6"
+                  BorderThickness="0" 
+                  Background="Transparent"
+                  Foreground="{DynamicResource BrushTextPrimary}"
+                  SelectionMode="Single"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                  MouseDoubleClick="LstPlans_MouseDoubleClick"
+                  KeyDown="LstPlans_KeyDown">
+            <ListView.ContextMenu>
+                <ContextMenu x:Name="ListContextMenu" Opened="ListContextMenu_Opened">
+                    <MenuItem x:Name="CtxApply" Header="Seçileni Uygula (Aktif Yap)" Click="BtnApply_Click" FontWeight="Bold">
+                        <MenuItem.Icon>
+                            <Image Source="menu_icon_0.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="CtxToggleStartupPlan" Header="📌 Oturum Açılışında Bu Güç Planına Geç" Click="BtnToggleStartupPlan_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="CtxCreateShortcut" Header="Masaüstüne Geçiş Kısayolu (.cmd) Oluştur" Click="BtnCreateShortcut_Click">
+                        <MenuItem.Icon>
+                            <Image Source="logo.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="CtxNewPlan" Header="Yeni Güç Düzeni Oluştur (Klonla)" Click="BtnNewPlan_Click">
+                        <MenuItem.Icon>
+                            <Image Source="menu_icon_1.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="CtxEditSettings" Header="Plan Ayarlarını Düzenle (İşlemci / Süreler)..." Click="BtnEditSettings_Click"/>
+                    <MenuItem x:Name="CtxCompare" Header="Güç Düzenlerini Karşılaştır..." Click="BtnComparePlans_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="CtxRename" Header="Yeniden Adlandır" Click="BtnRename_Click"/>
+                    <MenuItem x:Name="CtxExport" Header="Dışarıya Aktar (.pow)..." Click="BtnExport_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="CtxCopyGuid" Header="GUID Kopyala" Click="BtnCopyGuid_Click"/>
+                    <MenuItem x:Name="CtxCopyName" Header="Plan İsmini Kopyala" Click="BtnCopyName_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="CtxDelete" Header="Sil" Click="BtnDelete_Click">
+                        <MenuItem.Icon>
+                            <Image Source="menu_icon_2.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border x:Name="CardBorder" Margin="0,2.5" Padding="10,8" CornerRadius="8" 
+                            Background="{DynamicResource BrushCardBg}" 
+                            BorderBrush="{DynamicResource BrushBorder}" 
+                            BorderThickness="1" 
+                            SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Plan Icon Box -->
+                            <Border x:Name="ItemIconBd" Width="34" Height="34" CornerRadius="7" 
+                                    Background="{DynamicResource BrushWindowBg}" 
+                                    BorderBrush="{DynamicResource BrushBorder}" 
+                                    BorderThickness="1" Margin="0,0,10,0" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding PlanIcon}" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Plan Title & Tag -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding DisplayName}" FontSize="13" FontWeight="{Binding FontBoldWeight}" Foreground="{DynamicResource BrushTextPrimary}" TextTrimming="CharacterEllipsis"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                                    <Border Background="{DynamicResource BrushWindowBg}" CornerRadius="4" Padding="5,1" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="1">
+                                        <TextBlock Text="{Binding TagText}" FontSize="9.5" Foreground="{DynamicResource BrushTextSecondary}"/>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Right Status Pill / Check -->
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal">
+                                <Border x:Name="ActivePill" CornerRadius="10" Background="#163828" BorderBrush="#10B981" BorderThickness="1" Padding="7,2" Visibility="Collapsed" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding StatusBadgeText}" FontSize="9" FontWeight="Bold" Foreground="#10B981"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsActive}" Value="True">
+                            <Setter TargetName="ActivePill" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="CardBorder" Property="BorderBrush" Value="{DynamicResource BrushAccent}"/>
+                            <Setter TargetName="CardBorder" Property="Background" Value="{DynamicResource BrushListItemSelected}"/>
+                            <Setter TargetName="ItemIconBd" Property="Background" Value="{DynamicResource BrushAccentGlow}"/>
+                            <Setter TargetName="ItemIconBd" Property="BorderBrush" Value="{DynamicResource BrushAccent}"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- 3. Bottom Action Bar & Status -->
+        <Grid Grid.Row="2" Background="{DynamicResource BrushStatusBg}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Action Buttons Bar -->
+            <Border Grid.Row="0" BorderBrush="{DynamicResource BrushBorder}" BorderThickness="0,1,0,1" Padding="12,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="BtnApplySelectedBottom" Click="BtnApply_Click" 
+                            Background="{DynamicResource BrushAccent}" Foreground="#000000" 
+                            FontWeight="Bold" FontSize="12.5" Height="34" 
+                            Padding="12,0" Margin="0,0,6,0" Cursor="Hand" BorderThickness="0">
+                        <Button.Template>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="b" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="b" Property="Opacity" Value="0.9"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="⚡" FontSize="13" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="TxtApplyBtnText" Text="Seçileni Uygula" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Column="1" Click="BtnEditSettings_Click" 
+                            Style="{StaticResource ActionBtnStyle}" 
+                            ToolTip="Seçili Plan Ayarlarını Düzenle (Ctrl+E)" Height="34" Padding="12,0" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🛠" FontSize="13" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="TxtSettingsBtnText" Text="Ayarlar" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Column="2" Click="BtnComparePlans_Click" 
+                            Style="{StaticResource ActionBtnStyle}" 
+                            ToolTip="Tüm Güç Düzenlerini Karşılaştır" Height="34" Padding="12,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚖" FontSize="13" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="TxtCompareBtnText" Text="Karşılaştır" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Compact Status Bar -->
+            <StatusBar Grid.Row="1" Background="Transparent" Padding="12,3" Foreground="{DynamicResource BrushTextSecondary}">
+                <StatusBarItem Padding="0">
+                    <TextBlock x:Name="TxtStatus" Text="Hazır. Toplam Güç Düzeni: 0" FontSize="11"/>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right" Padding="0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button x:Name="BtnFeedbackStatus" Click="BtnFeedback_Click" 
+                                Background="Transparent" BorderThickness="0" Cursor="Hand" Padding="4,1" Margin="0,0,10,0"
+                                ToolTip="Geliştiriciye Geri Bildirim Gönder / Send Feedback">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="💬" FontSize="11" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TxtFeedbackStatus" Text="Geri Bildirim" FontSize="11" Foreground="{DynamicResource BrushAccent}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <TextBlock x:Name="TxtVersion" Text="Power Grid HaYTooL v1.0" FontSize="11" Cursor="Hand" MouseLeftButtonUp="TxtVersion_MouseLeftButtonUp" ToolTip="Hakkında / About"/>
+                    </StackPanel>
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+    </Grid>
+</Window>
